@@ -1,0 +1,35 @@
+Combine (aka "flatten") multiple streams
+======
+
+===
+1) merge()
+merge() - Merging multiple sequences concurrently
+
+Result stream:
+- completes when all input streams complete
+- throw an error if any of the streams throws an error
+- will never complete if some of the input streams don’t complete
+
+Use when:
+- you’re not concerned with the order of emissions
+- interested in all values coming out from multiple combined streams as if they were produced by one stream.
+
+===
+2) concat()
+concat() - Concatenating multiple sequences sequentially
+
+Result stream:
+- it subscribe to and emit values from each input stream sequentially
+- it has only one active subscription at a time
+- once current stream completes it subscribes to next
+
+- completes when all input streams complete
+- throw an error if any of the streams throws an error
+- will never complete if any of the input streams don’t complete
+- which also means that some streams will never be subscribed
+
+Use when:
+- if the order of emissions is important
+
+===
+3) race() - selecting stream that is the first to produce values, others are unsubscribed and completely ignored
