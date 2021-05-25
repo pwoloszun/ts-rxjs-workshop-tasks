@@ -4,15 +4,42 @@ import { myFromArray$, myInterval$, myRange$ } from './01-my-observables';
 import { fullObserver } from './utils';
 
 export function myTake$(source$: Observable<any>, count: number) {
-  return new Observable(function (obs) {
-    // TODO 1: impl
+
+  return new Observable((obs) => {
+    if (count <= 0) {
+      obs.complete();
+      return;
+    }
+
+    let emittedCount = 0;
+    const sub = source$.subscribe({
+      next(value) {
+        obs.next(value);
+        emittedCount += 1;
+        if (emittedCount >= count) {
+          obs.complete();
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      },
+    });
 
     // TODO 2: clear up
+    return () => { // cleanup fn
+      sub.unsubscribe();
+    };
   });
+
 }
 
+
 function taskTake() {
-  const interval$ = myInterval$(500);
+  const interval$ = myFromArray$(['a']); //myInterval$(500);
+  // const interval$ = myInterval$(500);
   const firstFour$ = myTake$(interval$, 4);
   firstFour$.subscribe(fullObserver('taskTake'));
 }

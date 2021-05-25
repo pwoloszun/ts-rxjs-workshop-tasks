@@ -61,38 +61,48 @@ function example1() {
 export function myTimeout$(delayInMs: number): Observable<void> {
 
   return new Observable<void>((obs) => {
-    setTimeout(() => {
+
+    const timeoutId = setTimeout(() => {
       obs.next();
       obs.complete();
     }, delayInMs);
+
+
+    return () => { // cleanup fn
+      console.log('CLEANUP timeout');
+      clearTimeout(timeoutId);
+    };
   });
 
 }
 
 function timeoutTask() {
   const timeout$ = myTimeout$(2000); // nothing happens
-  timeout$.subscribe({
-    next(value) {
-      console.log('NEXT timeoutTask', value);
-    },
-    error(err) {
-      console.log('ERROR timeoutTask', err);
-    },
-    complete() {
-      console.log('COMPLETE timeoutTask');
-    },
-
-  });
+  timeout$.subscribe(myFullObserver('timeoutTask'));
 }
 
 // TODO task: myFullObserver(tag)
 function myFullObserver(tag: string): Observer<any> {
-  return null as any as Observer<any>;
+  return {
+    next(value) {
+      console.log(`NEXT ${tag}`, value);
+    },
+    error(err) {
+      console.log(`ERROR ${tag}`, err);
+    },
+    complete() {
+      console.log(`COMPLETE ${tag}`);
+    },
+
+  };
 }
 
 // TODO task: myFromArray$
 export function myFromArray$(items: any[]): Observable<any> {
-  return NEVER; // TODO
+  return new Observable<void>((obs) => {
+    items.forEach((el) => obs.next(el));
+    obs.complete();
+  });
 }
 
 function fromArrayTask() {
@@ -140,19 +150,27 @@ function rangeTask() {
 // TODO task: myInterval$
 // instant op
 // console.log('instant');
-// setInterval(() => {
+
+// const intervalId = setInterval(() => {
 //   console.log('each 3sec');
 // }, 3000);
+
+// clearInterval(intervalId);
 
 
 export function myInterval$(delayInMs: number): Observable<number> {
 
   return new Observable<number>((obs) => {
     let i = 0; // cold aka stateless
-    setInterval(() => {
+    const intervlaId = setInterval(() => {
       obs.next(i);
       i += 1;
     }, delayInMs);
+
+    return () => { // clean up
+      console.log('INTERV clean up');
+      clearInterval(intervlaId);
+    };
   });
 
 }
