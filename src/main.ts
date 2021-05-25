@@ -5,4 +5,16 @@ import { AppRunner } from './app-runner';
 // renderApp();
 
 const appRunner = new AppRunner();
+
 appRunner.run();
+
+
+
+
+
+
+
+
+
+
+// const tttt : string = 123;

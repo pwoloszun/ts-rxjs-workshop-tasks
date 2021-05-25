@@ -1,17 +1,51 @@
 import { Observable, Observer, NEVER } from 'rxjs';
 
-export function myCustom$(name: string): Observable<string> {
-  return new Observable(function (obs) {
+export function myCustom$(name: string) {
+
+  return new Observable<string>(function (obs) {
     console.log('generating Observable');
     // next
-    // error
-    // complete
+    obs.next(`batman! ${name}`);
+    setTimeout(() => {
+      obs.next('batman 2');
+
+      obs.complete();
+    }, 2000);
+    obs.next('batman 3');
+
+    // obs.error(new Error(`ola boga!`));
+    // throw new Error(`ola boga! 22`);
   });
+
 }
 
 function example1() {
   const custom$ = myCustom$('bob'); // nothing happens
-  // custom$.subscribe((value: string) => console.log('[NEXT] timeout', value));
+  custom$.subscribe({
+    next(value: string) {
+      console.log('[NEXT] example1', value);
+    },
+    error(err: Error) {
+      console.log('[ERROR] example1', err);
+    },
+    complete() {
+      console.log('[COMPLETE] example1');
+    },
+  });
+
+  // custom$.subscribe({
+  //   next(value: string) {
+  //     console.log('[NEXT] 2nd', value);
+  //   },
+  //   error(err: Error) {
+  //     console.log('[ERROR] 2nd', err);
+  //   },
+  //   complete() {
+  //     console.log('[COMPLETE] 2nd');
+  //   },
+  // });
+
+
   // TODO 1b: next(), error(), complete()
   // TODO 2: each subscribe call generating fn
   // custom$.subscribe(fullObserver('example1'));
@@ -21,9 +55,18 @@ function example1() {
 //======
 
 
+
+
 // TODO myTimeout$()
 export function myTimeout$(delayInMs: number): Observable<void> {
-  return NEVER; // TODO
+
+  return new Observable<void>((obs) => {
+    setTimeout(() => {
+      obs.next();
+      obs.complete();
+    }, delayInMs);
+  });
+
 }
 
 function timeoutTask() {
@@ -69,13 +112,29 @@ function rangeTask() {
 }
 
 // TODO task: myInterval$
+setInterval(() => {
+
+}, 3000);
+
+
 export function myInterval$(delayInMs: number): Observable<number> {
   return NEVER; // TODO
 }
 
 function intervalTask() {
   myInterval$(1000)
-    .subscribe(myFullObserver('intervalTask'));
+    .subscribe({
+      next(value) {
+        console.log('NEXT intervalTask', value);
+      },
+      error(err) {
+        console.log('ERROR intervalTask', err);
+      },
+      complete() {
+        console.log('COMPLETE intervalTask');
+      },
+
+    });
 }
 
 function myFromArrayWithDelay$(items: any[], delayInMs: number): Observable<any> {
@@ -107,9 +166,10 @@ function throwTask() {
 // TODO task: myTimer$
 
 export function myObservablesApp() {
+  console.log('qq');
   // example1();
-  // timeoutTask();
-  // intervalTask();
+  timeoutTask();
+  intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
