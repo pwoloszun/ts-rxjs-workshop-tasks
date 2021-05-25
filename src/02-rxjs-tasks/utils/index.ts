@@ -11,7 +11,7 @@ export function items$(items: any[], delayInMs: number): Observable<any> {
   );
 }
 
-export function stream$(name, delayInMs: number, limit: number = null, logType: string = 'none') {
+export function stream$(name: string, delayInMs: number, limit: number | null = null, logType: string = 'none') {
   let s = timer(0, delayInMs).pipe(
     map((v) => v + `-${name}`)
   );
@@ -53,7 +53,7 @@ export function fullObserver(tag: string): Observer<any> {
   };
 }
 
-export function partialObserver(stream) {
+export function partialObserver(stream: any) {
   return {
     error() {
       const message = stream.length < 5 ? `[${stream}]:\t\tERROR` : `[${stream}]:\tERROR`;
@@ -66,13 +66,13 @@ export function partialObserver(stream) {
   };
 }
 
-export function randomBetween(min, max) {
+export function randomBetween(min: number, max: number) {
   return Math.floor(min + Math.random() * (max - min));
 }
 
-export function throwOnItem(count, stream) {
-  return (source) => source.pipe(
-    scan((acc, value) => [value, ...acc], []),
+export function throwOnItem(count: number, stream: any) {
+  return (source: any) => source.pipe(
+    scan((acc: any, value: any) => [value, ...acc], []),
     map((values: Number[]) => {
       if (values.length === count) {
         throw new Error(`Error on the stream '${stream}'!`);
