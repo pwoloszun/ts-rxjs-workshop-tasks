@@ -98,7 +98,33 @@ export function myFromArray$(items: any[]): Observable<any> {
 function fromArrayTask() {
   const names = ['bob', 'ed', 'kate'];
   myFromArray$(names)
-    .subscribe(myFullObserver('fromArrayTask'));
+    .subscribe({
+      next(value) {
+        console.log('NEXT fromArrayTask', value);
+      },
+      error(err) {
+        console.log('ERROR fromArrayTask', err);
+      },
+      complete() {
+        console.log('COMPLETE fromArrayTask');
+      },
+
+    });
+
+
+  myFromArray$([123, 456, 789])
+    .subscribe({
+      next(value) {
+        console.log('NEXT fromArrayTask', value);
+      },
+      error(err) {
+        console.log('ERROR fromArrayTask', err);
+      },
+      complete() {
+        console.log('COMPLETE fromArrayTask');
+      },
+
+    });
 }
 
 // TODO task: myRange$
@@ -112,17 +138,29 @@ function rangeTask() {
 }
 
 // TODO task: myInterval$
-setInterval(() => {
-
-}, 3000);
+// instant op
+// console.log('instant');
+// setInterval(() => {
+//   console.log('each 3sec');
+// }, 3000);
 
 
 export function myInterval$(delayInMs: number): Observable<number> {
-  return NEVER; // TODO
+
+  return new Observable<number>((obs) => {
+    let i = 0; // cold aka stateless
+    setInterval(() => {
+      obs.next(i);
+      i += 1;
+    }, delayInMs);
+  });
+
 }
 
 function intervalTask() {
-  myInterval$(1000)
+  const interval$ = myInterval$(2000);
+
+  interval$
     .subscribe({
       next(value) {
         console.log('NEXT intervalTask', value);
@@ -135,6 +173,9 @@ function intervalTask() {
       },
 
     });
+
+
+
 }
 
 function myFromArrayWithDelay$(items: any[], delayInMs: number): Observable<any> {
@@ -168,9 +209,9 @@ function throwTask() {
 export function myObservablesApp() {
   console.log('qq');
   // example1();
-  timeoutTask();
-  intervalTask();
-  // fromArrayTask();
+  // timeoutTask();
+  // intervalTask();
+  fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
   // rangeTask();
