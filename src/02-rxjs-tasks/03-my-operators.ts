@@ -38,8 +38,8 @@ export function myTake$(source$: Observable<any>, count: number) {
 
 
 function taskTake() {
-  const interval$ = myFromArray$(['a']); //myInterval$(500);
-  // const interval$ = myInterval$(500);
+  // const interval$ = myFromArray$(['a']); //myInterval$(500);
+  const interval$ = myInterval$(500);
   const firstFour$ = myTake$(interval$, 4);
   firstFour$.subscribe(fullObserver('taskTake'));
 }
@@ -50,6 +50,7 @@ function mySkip$(source$: Observable<any>, count: number): Observable<any> {
 }
 
 function taskSkip() {
+  // const interval$ = myFromArray$(['a']); //myInterval$(500);
   const interval$ = myInterval$(500);
   const withoutFirstSeven$ = mySkip$(interval$, 7);
   withoutFirstSeven$.subscribe(fullObserver('taskSkip'));
@@ -62,7 +63,7 @@ function myMap$(source$: Observable<any>, mappingFn: Function): Observable<any> 
 
 function taskMap() {
   const interval$ = myInterval$(500);
-  const mapped$ = myMap$(interval$, (i: any) => i * 10);
+  const mapped$ = myMap$(interval$, (i: any) => i ** 2);
   mapped$.subscribe(fullObserver('taskMap'));
 
   const names$ = myFromArray$(['bob', 'ed']);
@@ -132,9 +133,13 @@ function myBufferCount$(source$: Observable<any>, bufferSize: number) {
 }
 
 function taskBufferCount() {
-  const values$ = myRange$(0, 67);
+  const values$ = myRange$(0, 67); // [0..66]
   myBufferCount$(values$, 25)
     .subscribe(fullObserver('taskBufferCount'));
+  // [0..24]
+  // [25..49]
+  // [50..66]
+
 }
 
 function myStartsWith$(source$: Observable<any>, startValue: any) {
@@ -153,18 +158,21 @@ function myWithLatestFrom$(source$: Observable<any>, other$: Observable<any>): O
 
 function taskWithLatestFrom() {
   const slow$ = myInterval$(800);
-  const quick$ = myInterval$(4200);
+  const quick$ = myInterval$(2400);
 
   // myWithLatestFrom$(quick$, slow$)
   //   .subscribe(fullObserver('taskWithLatestFrom: quick, slow'));
 
   myWithLatestFrom$(slow$, quick$)
     .subscribe(fullObserver('taskWithLatestFrom: slow, quick 2'));
+  // [2, 0], [3, 0], [4, 0], [5,0], [5,1], 
 }
 
 export function myOperatorsApp() {
-  taskTake();
-  // taskSkip();
+  // taskTake();
+  taskSkip();
+
+
   // taskMap();
   // taskFilter();
   // taskTakeWhile();

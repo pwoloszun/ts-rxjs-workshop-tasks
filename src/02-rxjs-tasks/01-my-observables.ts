@@ -227,10 +227,10 @@ function throwTask() {
 export function myObservablesApp() {
   console.log('qq');
   // example1();
-  // timeoutTask();
-  // intervalTask();
+  timeoutTask();
+  intervalTask();
   fromArrayTask();
-  // fromArrayWithDelayTask();
-  // throwTask();
-  // rangeTask();
+  fromArrayWithDelayTask();
+  throwTask();
+  rangeTask();
 }

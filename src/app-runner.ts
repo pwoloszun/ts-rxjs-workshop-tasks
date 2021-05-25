@@ -49,6 +49,9 @@ export class AppRunner {
   run() {
     // myObservablesApp();
     // mySubscriptionsApp();
-    myOperatorsApp();
+    // myOperatorsApp();
+    // builtInApp();
+    // combineMultipleStreamsApp();
+    myHooOperatorsApp();
   }
 }

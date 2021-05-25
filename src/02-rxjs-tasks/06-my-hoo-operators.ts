@@ -1,7 +1,68 @@
-import { Observable, Subscription, of, from, interval } from "rxjs";
-import { map, mergeAll, take, } from "rxjs/operators";
+import { Observable, Subscription, of, from, interval, fromEvent } from 'rxjs';
+import { concatMap, map, mergeAll, switchAll, take, } from 'rxjs/operators';
 
 import { fullObserver } from "./utils";
+
+
+// const ajaxRequest$ = httpService.get('/todos');
+
+
+// const btnDOM = {} as any;
+
+// // HOO higher order observable/stream
+// const btnClickHOO$ = fromEvent(btnDOM, 'click').pipe(
+
+//   mergeMap((ev) => {
+//     const ajaxRequest$ = httpService.get('/todos'); // inner stream
+//     return ajaxRequest$;
+//   })
+
+//   // map(() => {
+//   //   const ajaxRequest$ = httpService.get('/todos'); // inner stream
+//   //   return ajaxRequest$;
+//   // }),
+//   // mergeAll()
+//   // concatAll()
+//   // concatMap(() =>)
+//   // switchAll()
+//   // switchMap()
+//   // exhaustAll()
+//   // exhaustMap
+// );
+
+
+
+
+// btnClickHOO$.subscribe({
+//   next(inner$) {
+//     inner$.subscribe({
+//       next(innerData) { // data from server
+//         console.log('RENDER', innerData);
+//       }
+//     });
+//   }
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function letterStream$(letter: string, { delayInMs, count }: { delayInMs: number; count: number; }) {
   return interval(delayInMs).pipe(
@@ -41,9 +102,32 @@ function exampleMyConcatAll() {
 }
 
 // TODO: mySwitchAll$
-function mySwitchAll$($sourceHoo: Observable<Observable<any>>) {
-  return new Observable(function () {
+function mySwitchAll$(sourceHoo$: Observable<Observable<any>>) {
+
+  return new Observable(function (obs) {
+    let innerSub: Subscription;
+
+    sourceHoo$.subscribe({
+      next(inner$) {
+
+        if (innerSub) {
+          innerSub.unsubscribe();
+        }
+        innerSub = inner$.subscribe({
+          next(val) {
+            obs.next(val);
+          },
+          error(err) { },
+          complete() { },
+        });
+
+      },
+      error(err) { },
+      complete() { },
+    });
+
   });
+
 }
 
 function exampleMySwitchAll() {
@@ -58,6 +142,7 @@ function exampleMySwitchAll() {
 
   mySwitchAll$(higherOrderStream$)
     .subscribe(fullObserver('mySwitchAll$'));
+  // A-0, A-1, A-2, B-0, C-0, C-1
 }
 
 
@@ -79,12 +164,13 @@ function exampleMyExhaustAll() {
 
   myExhaustAll$(higherOrderStream$)
     .subscribe(fullObserver('exampleMyExhaustAll'));
+  // A0...A4, C0..C1
 }
 
 
 export function myHooOperatorsApp() {
   // exampleMyMergeAll();
   // exampleMyConcatAll();
-  // exampleMySwitchAll();
+  exampleMySwitchAll();
   // exampleMyExhaustAll();
 }

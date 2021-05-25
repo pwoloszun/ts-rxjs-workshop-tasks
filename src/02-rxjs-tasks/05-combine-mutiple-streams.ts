@@ -1,5 +1,5 @@
 import { interval, of, race, concat, merge, NEVER } from 'rxjs';
-import { map, take, delay } from 'rxjs/operators';
+import { map, take, delay, catchError } from 'rxjs/operators';
 
 import { fullObserver } from './utils';
 
@@ -24,6 +24,9 @@ function concatExample() {
   const slow$ = myStream$('slow', 2200);
 
   concat(quick$, medium$, slow$).subscribe(fullObserver('concat'));
+
+  // const api$ = concat(api$.pipe(catchError(() => EMPTY)), subApi$)
+
 
   // never runs
   // interval(500).pipe(
@@ -82,7 +85,7 @@ function task2() {
 }
 
 export function combineMultipleStreamsApp() {
-  // mergeExample();
+  mergeExample();
   // concatExample();
   // raceExample();
   // testUserTransactions();

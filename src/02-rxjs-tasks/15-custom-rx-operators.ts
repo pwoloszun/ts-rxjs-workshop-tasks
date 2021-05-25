@@ -31,6 +31,13 @@ function myCustomOperator() {
   };
 }
 
+function myMap(mappingFn:(el:any)=>any) {
+  return function (source$: Observable<any>) {
+    return source$.pipe(/*...*/);
+  };
+}
+
+
 function reverseString(): MonoTypeOperatorFunction<string> {
   return null as any;
 }

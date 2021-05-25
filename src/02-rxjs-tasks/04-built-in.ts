@@ -1,7 +1,6 @@
 // Observable creators
-import { interval, from, range } from 'rxjs';
+import { of, interval, from, range, timer, Observable } from 'rxjs';
 
-// operators
 import {
   map,
   filter,
@@ -24,6 +23,54 @@ import {
 
 import { fullObserver } from './utils';
 
+
+
+// from([1, 2, 3])
+
+// const data = [1, 2, 3]
+// of(data).pipe(
+
+// ).subscribe();
+
+
+
+
+
+
+
+
+// myTake$(
+//   myFilter$(
+//     myMap$(
+//       myInterval$(1000),
+//       () => { }
+//     ),
+//     () => { }
+//   ),
+//   5)
+
+// interval(1000).pipe(
+//   map((n) => n ** 2),
+//   filter((n) => n % 2 === 0),
+//   take(5),
+//   reduce((memo, n) => memo + n)
+// ).subscribe(fullObserver('my interva'));
+
+// interval(1000).pipe(
+//   myAlgorithm(123, 'qq')
+// ).subscribe(fullObserver('my interva'));
+
+// function myAlgorithm(num: number, str: string): MonoTypeOperatorFunction<string> {
+//   return (source$: Observable<any>) => {
+//     return source$.pipe(
+//       map((n) => n ** 2 + num),
+//       filter((n) => n % 2 === 0),
+//       take(5),
+//       reduce((memo, n) => memo + n)
+//     );
+//   };
+// }
+
 // TODO example 1:
 // wez tablice imion ->
 // bierz imiona dopoki !== 'ADMIN' ->
@@ -33,9 +80,10 @@ import { fullObserver } from './utils';
 function example1() {
   const names = ['bob', 'ed', 'kate', 'ADMIN', 'boby'];
   // TODO
+
   from(names).pipe(
     takeWhile((name) => name !== 'ADMIN'),
-    map((name) => `Hello ${name}`),
+    map((name) => `Hello ${name}!`),
     delay(1200)
   ).subscribe(fullObserver('example1'));
 }
@@ -49,6 +97,12 @@ function example1() {
 function example3() {
   const names = ['bob', 'ed', 'kate', 'ADMIN', 'boby'];
   // TODO
+  interval(1200).pipe(
+    take(names.length),
+    map((index) => names[index]),
+    takeWhile((name) => name !== 'ADMIN'),
+    map((name) => `Hello ${name}!`),
+  ).subscribe(fullObserver('example3'));
 }
 
 
@@ -66,11 +120,18 @@ function task1() {
 // stworz interwal co 0.8s ->
 // pomin pierwsza wygenerowana liczbe
 // z pozostalych, wez tylko 10 pierwszych wynikow ->
-// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb ->
-// kazdy posredni wynik zaloguj na konsoli ("side effect")->
+// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb -> SCAN
+// kazdy posredni wynik zaloguj na konsoli ("side effect")-> TAP
 // wez tylko ostatni obliczony wynik ->
 // ostatni iloczyn zaloguj na konsoli
 function task2() {
+  interval(800).pipe(
+    skip(1),
+    take(10),
+    scan((memo, n) => memo * n),
+    tap((result) => console.log('result', result)),
+    takeLast(1)
+  ).subscribe(fullObserver('task2'));
 }
 
 // TODO task 3:
