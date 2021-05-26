@@ -30,8 +30,10 @@ function fakeApiCall$() {
 
 function catchExample() {
   fakeApiCall$().pipe(
-    // catchError((error) => of(error)),
-    // retry(),
+    retry(2),
+    catchError((error) => {
+      return of('qqq');
+    }),
     tap((v) => console.log('my catch LOG', v))
   ).subscribe(fullObserver('catchExample'));
 }
@@ -48,5 +50,5 @@ function finalizeExample() {
 export function catchRetryTaskApp() {
   // throwExample();
   // catchExample();
-  // finalizeExample();
+  finalizeExample();
 }
