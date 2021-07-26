@@ -139,11 +139,22 @@ function rangeTask() {
 
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    let i = 0;
+
+    setInterval(() => {
+      obs.next(i);
+      i += 1;
+    }, delayInMs);
+
+  });
+
 }
 
 function intervalTask() {
   const interval$ = myInterval$(1000);
+
   interval$.subscribe({
     next(value) {
       console.log('NEXT intervalTask', value);
@@ -153,6 +164,12 @@ function intervalTask() {
     },
     complete() {
       console.log('COMPLETE intervalTask');
+    },
+  });
+
+  interval$.subscribe({
+    next(value) {
+      console.log('NEXT intervalTask 2nd', value);
     },
   });
 }
