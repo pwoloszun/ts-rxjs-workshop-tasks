@@ -118,8 +118,18 @@ export function myFromArray$(items: any[]): Observable<any> {
 
 function fromArrayTask() {
   const names = ['bob', 'ed', 'kate'];
-  myFromArray$(names)
-    .subscribe(myFullObserver('fromArrayTask'));
+  const names$ = myFromArray$(names);
+  names$.subscribe({
+    next(value) {
+      console.log('NEXT fromArrayTask', value);
+    },
+    error(err) {
+      console.log('ERROR fromArrayTask', err);
+    },
+    complete() {
+      console.log('COMPLETE fromArrayTask');
+    },
+  });
 }
 
 // TODO task: myRange$
@@ -205,8 +215,8 @@ function throwTask() {
 export function myObservablesApp() {
   // example1();
   // timeoutTask();
-  intervalTask();
-  // fromArrayTask();
+  // intervalTask();
+  fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
   // rangeTask();
