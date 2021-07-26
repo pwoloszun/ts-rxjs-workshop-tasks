@@ -1,21 +1,77 @@
 import { Observable, Observer, NEVER } from 'rxjs';
 
 export function myCustom$(name: string): Observable<string> {
-  return new Observable(function (obs) {
+
+  return new Observable((obs) => {
     console.log('generating Observable');
     // next
+    obs.next('qq 1');
+
+    setTimeout(() => {
+      console.log('async call');
+
+      obs.next('qq 2');
+      obs.next('qq 3');
+    }, 2000);
+
+    obs.next('qq 4');
+
     // error
     // complete
+    obs.complete();
+    obs.error(new Error(`ola boga!`));
+    // throw new Error(`ola boga!`);
+
   });
+
 }
 
 function example1() {
+  console.log('exmpl 1');
+
   const custom$ = myCustom$('bob'); // nothing happens
+
+  custom$.subscribe({
+    next(value) {
+      console.log('NEXT example 1', value);
+    },
+
+    error(err) {
+      console.log('ERROR example 1', err);
+    },
+
+    complete() {
+      console.log('COMPLETE example 1');
+    },
+  });
+
+  // custom$.subscribe(
+  //   (value) => {},
+  //   null,
+  //   () => {}
+  // );
+
+  // custom$.subscribe({
+  //   next(v) {
+  //     console.log('observer 2', v);
+  //   }
+  // });
+
+
+
   // custom$.subscribe((value: string) => console.log('[NEXT] timeout', value));
   // TODO 1b: next(), error(), complete()
   // TODO 2: each subscribe call generating fn
   // custom$.subscribe(fullObserver('example1'));
 }
+
+
+
+
+
+
+
+
 
 
 //======
@@ -107,7 +163,7 @@ function throwTask() {
 // TODO task: myTimer$
 
 export function myObservablesApp() {
-  // example1();
+  example1();
   // timeoutTask();
   // intervalTask();
   // fromArrayTask();
