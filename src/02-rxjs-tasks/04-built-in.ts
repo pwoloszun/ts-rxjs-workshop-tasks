@@ -110,6 +110,13 @@ function task1() {
 // wez tylko ostatni obliczony wynik ->
 // ostatni iloczyn zaloguj na konsoli
 function task2() {
+  interval(800).pipe(
+    skip(1),
+    take(10),
+    scan((memo, i) => memo * i),
+    tap((i) => console.log('side effect', i)),
+    takeLast(1)
+  ).subscribe(fullObserver('task2'));
 }
 
 // TODO task 3:
