@@ -217,7 +217,7 @@ function taskReduce() {
     numbers$,
     (memo: any, item: any) => memo * item,
     -5
-  );
+  ); // => -600
   mltpResult$.subscribe(fullObserver('taskReduce'));
 }
 
