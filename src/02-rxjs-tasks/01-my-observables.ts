@@ -180,7 +180,7 @@ export function myRange$(startValue: number, count: number): Observable<number> 
 
   return new Observable((obs) => {
     for (let index = 0; index < count; index++) {
-      const value = startValue + count;
+      const value = startValue + index;
       obs.next(value);
     }
     obs.complete();

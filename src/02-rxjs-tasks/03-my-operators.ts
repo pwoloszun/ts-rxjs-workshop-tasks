@@ -223,7 +223,29 @@ function taskReduce() {
 
 // TODO myBufferCount$
 function myBufferCount$(source$: Observable<any>, bufferSize: number) {
-  return NEVER;
+
+  return new Observable((obs) => {
+    let buffer: any[] = [];
+    source$.subscribe({
+      next(val) {
+        buffer.push(val);
+        if (buffer.length >= bufferSize) {
+          obs.next(buffer);
+          buffer = [];
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        if (buffer.length > 0) {
+          obs.next(buffer);
+        }
+        obs.complete();
+      },
+    });
+  });
+
 }
 
 function taskBufferCount() {
@@ -263,8 +285,8 @@ function taskWithLatestFrom() {
 export function myOperatorsApp() {
   // taskTake();
   // taskSkip();
-  taskMap();
-  taskFilter();
+  // taskMap();
+  // taskFilter();
   // taskTakeWhile();
   // taskFirst();
   // taskReduce();
