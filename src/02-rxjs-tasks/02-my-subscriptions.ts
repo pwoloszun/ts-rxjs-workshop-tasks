@@ -16,6 +16,6 @@ function task1() {
 }
 
 export function mySubscriptionsApp() {
-  // example1();
+  example1();
   // task1();
 }

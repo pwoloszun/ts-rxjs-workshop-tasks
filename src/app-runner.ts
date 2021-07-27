@@ -47,7 +47,7 @@ import { customRxOperators } from './02-rxjs-tasks/15-custom-rx-operators';
 
 export class AppRunner {
   run() {
-    myObservablesApp();
-    // mySubscriptionsApp();
+    // myObservablesApp();
+    mySubscriptionsApp();
   }
 }
