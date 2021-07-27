@@ -116,12 +116,27 @@ function taskSkip() {
 
 
 
-
-
+// const arr = []
+// arr.map((i) => 1 * 10)
 
 // TODO task: myMap$
 function myMap$(source$: Observable<any>, mappingFn: Function): Observable<any> {
-  return NEVER;
+
+  return new Observable((obs) => {
+    source$.subscribe({
+      next(val) {
+        const mappedVal = mappingFn(val);
+        obs.next(mappedVal);
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+  });
+
 }
 
 function taskMap() {
@@ -133,13 +148,6 @@ function taskMap() {
   const greetings$ = myMap$(names$, (name: any) => `Hello ${name}!`);
   greetings$.subscribe(fullObserver('greetings'));
 }
-
-
-
-
-
-
-
 
 // TODO task: myFilter$
 function myFilter$(source$: Observable<any>, filteringFn: Function): Observable<any> {
