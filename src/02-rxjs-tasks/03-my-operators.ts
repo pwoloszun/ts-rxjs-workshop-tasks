@@ -151,7 +151,23 @@ function taskMap() {
 
 // TODO task: myFilter$
 function myFilter$(source$: Observable<any>, filteringFn: Function): Observable<any> {
-  return NEVER;
+
+  return new Observable((obs) => {
+    source$.subscribe({
+      next(val) {
+        if (filteringFn(val)) {
+          obs.next(val);
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+  });
+
 }
 
 function taskFilter() {
