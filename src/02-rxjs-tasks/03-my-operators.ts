@@ -214,6 +214,9 @@ function taskBufferCount() {
   const values$ = myRange$(0, 67);
   myBufferCount$(values$, 25)
     .subscribe(fullObserver('taskBufferCount'));
+  // [0..24]
+  // [25..49]
+  // [50, 66]
 }
 
 function myStartsWith$(source$: Observable<any>, startValue: any) {
@@ -245,11 +248,11 @@ export function myOperatorsApp() {
   // taskTake();
   // taskSkip();
   taskMap();
-  // taskFilter();
+  taskFilter();
   // taskTakeWhile();
   // taskFirst();
   // taskReduce();
-  // taskBufferCount();
+  taskBufferCount();
   // taskStartsWith();
   // taskWithLatestFrom();
 }
