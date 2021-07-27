@@ -3,9 +3,13 @@ import { myInterval$, myTimeout$ } from './01-my-observables';
 
 function example1() {
   const timeout$ = myTimeout$(5500);
-  const subscription = timeout$.subscribe(fullObserver('unsubscribe timeout'));
+
+  const subscription = timeout$.subscribe(
+    fullObserver('timeout unsub')
+  );
 
   setTimeout(() => {
+    console.log('unsubsc');
     subscription.unsubscribe();
   }, 2000);
 }

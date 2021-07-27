@@ -84,18 +84,36 @@ setTimeout(() => {
 export function myTimeout$(delayInMs: number): Observable<void> {
 
   return new Observable((obs) => {
+
     const timeoutId = setTimeout(() => {
+      console.log('mem leak');
+
       obs.next();
       obs.complete();
     }, delayInMs);
 
-    return () => { // cleanup
-      console.log('cleanup myTimeout$');
+    return () => {
+      console.log('cleanup');
+      // ...
       clearTimeout(timeoutId);
     };
+
   });
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function timeoutTask() {
   const timeout$ = myTimeout$(2000); // nothing happens
