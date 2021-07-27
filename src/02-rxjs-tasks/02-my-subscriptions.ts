@@ -1,5 +1,6 @@
 import { fullObserver } from "./utils";
 import { myInterval$, myTimeout$ } from './01-my-observables';
+import { fullObserver } from './utils/index';
 
 function example1() {
   const timeout$ = myTimeout$(5500);
@@ -18,10 +19,17 @@ function example1() {
 function task1() {
   // TODO
   // create interval stream with delay = 1000ms
+  const interval$ = myInterval$(1000);
 
   // subscribe
+  const sub = interval$.subscribe(
+    fullObserver('interv task1')
+  );
 
   // async after 3,5s unsub
+  setTimeout(() => {
+    sub.unsubscribe();
+  }, 3500);
 }
 
 export function mySubscriptionsApp() {
