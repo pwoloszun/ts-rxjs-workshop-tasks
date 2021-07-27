@@ -78,6 +78,11 @@ function taskSkip() {
   withoutFirstSeven$.subscribe(fullObserver('taskSkip'));
 }
 
+
+
+
+
+
 // TODO task: myMap$
 function myMap$(source$: Observable<any>, mappingFn: Function): Observable<any> {
   return NEVER;
@@ -187,7 +192,7 @@ function taskWithLatestFrom() {
 
 export function myOperatorsApp() {
   taskTake();
-  // taskSkip();
+  taskSkip();
   // taskMap();
   // taskFilter();
   // taskTakeWhile();
