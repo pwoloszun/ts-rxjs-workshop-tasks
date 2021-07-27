@@ -1,6 +1,5 @@
 import { fullObserver } from "./utils";
 import { myInterval$, myTimeout$ } from './01-my-observables';
-import { fullObserver } from './utils/index';
 
 function example1() {
   const timeout$ = myTimeout$(5500);
