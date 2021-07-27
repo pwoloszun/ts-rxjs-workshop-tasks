@@ -3,19 +3,69 @@ import { Observable, NEVER } from 'rxjs';
 import { myFromArray$, myInterval$, myRange$ } from './01-my-observables';
 import { fullObserver } from './utils';
 
-export function myTake$(source$: Observable<any>, count: number) {
-  return new Observable(function (obs) {
-    // TODO 1: impl
 
-    // TODO 2: clear up
+// function myNevver$() {
+//   return new Observable((obs) => {
+//   });
+// }
+
+export function myTake$(source$: Observable<any>, maxCount: number) {
+
+  return new Observable((obs) => {
+
+    let i = 0;
+    const sub = source$.subscribe({
+      next(val) {
+        obs.next(val);
+        i++;
+        if (i >= maxCount) {
+          obs.complete();
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      },
+
+    });
+
+    return () => sub.unsubscribe();
   });
+
 }
+
+
+
+
+
+
+
 
 function taskTake() {
+
+
   const interval$ = myInterval$(500);
   const firstFour$ = myTake$(interval$, 4);
+
+  // const arr$ = myFromArray$(['a']);
+  // const firstFour$ = myTake$(arr$, 4);
+
   firstFour$.subscribe(fullObserver('taskTake'));
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 // TODO task: mySkip$
 function mySkip$(source$: Observable<any>, count: number): Observable<any> {
