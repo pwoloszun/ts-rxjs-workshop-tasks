@@ -223,7 +223,11 @@ function fromArrayWithDelayTask() {
 }
 
 function myThrow$(error: Error) {
-  return NEVER;
+
+  return new Observable((obs) => {
+    obs.error(error);
+  });
+
 }
 
 function throwTask() {
