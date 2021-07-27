@@ -154,11 +154,19 @@ function fromArrayTask() {
 
 // TODO task: myRange$
 export function myRange$(startValue: number, count: number): Observable<number> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    for (let index = 0; index < count; index++) {
+      const value = startValue + count;
+      obs.next(value);
+    }
+    obs.complete();
+  }); // TODO
+
 }
 
 function rangeTask() {
-  const range$ = myRange$(5, 7);
+  const range$ = myRange$(5, 7); // 5, 6.., 11
   range$.subscribe(myFullObserver('rangeTask'));
 }
 
@@ -238,6 +246,6 @@ export function myObservablesApp() {
   // intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
-  // throwTask();
+  throwTask();
   rangeTask();
 }
