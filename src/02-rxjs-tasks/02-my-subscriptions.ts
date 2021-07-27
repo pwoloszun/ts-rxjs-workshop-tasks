@@ -17,6 +17,11 @@ function example1() {
 // TODO: impl unsubscribe to: myInterval$()
 function task1() {
   // TODO
+  // create interval stream with delay = 1000ms
+
+  // subscribe
+
+  // async after 3,5s unsub
 }
 
 export function mySubscriptionsApp() {
