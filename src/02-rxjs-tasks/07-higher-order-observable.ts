@@ -1,11 +1,13 @@
-import { forkJoin, interval, of, from, timer, NEVER } from 'rxjs';
+import { forkJoin, interval, of, from, timer, NEVER, range, fromEvent } from 'rxjs';
 import {
+  concatAll,
   concatMap,
   delay,
   exhaustMap,
   map,
   mergeAll,
   mergeMap,
+  startWith,
   switchMap,
   switchMapTo,
   take,
@@ -14,6 +16,58 @@ import {
 } from 'rxjs/operators';
 
 import { fullObserver, items$, randomBetween } from './utils';
+
+
+// const btnDomEl = {} as any;
+// const bntClick$ = fromEvent(btnDomEl, 'click');
+
+// const httpService = {} as any;
+
+// btnClick$.pipe(
+//   map(() => {
+//     const inner$ = httpService.get$('/user/100');
+//     return inner$;
+//   }),
+//   // mergeAll()
+//   // concatAll()
+//   // switchAll()
+//   // exhaustAll()
+// )
+
+
+
+
+
+
+
+
+
+
+// interval(1000).pipe(
+//   map((n) => range(0, n))
+// ).subscribe({
+//   next(inner$) {
+//     inner$.subscribe({
+//       next(value) {
+//         // app logic
+//       }
+//     })
+//   }
+// })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function btnClick$(delay: number, count: number) {
