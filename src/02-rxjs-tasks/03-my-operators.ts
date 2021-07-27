@@ -12,7 +12,6 @@ import { fullObserver } from './utils';
 export function myTake$(source$: Observable<any>, maxCount: number) {
 
   return new Observable((obs) => {
-
     let i = 0;
     const sub = source$.subscribe({
       next(val) {
@@ -27,10 +26,10 @@ export function myTake$(source$: Observable<any>, maxCount: number) {
       },
       complete() {
         obs.complete();
-      },
-
+      }
     });
 
+    // cleanup
     return () => sub.unsubscribe();
   });
 
@@ -69,14 +68,51 @@ function taskTake() {
 
 // TODO task: mySkip$
 function mySkip$(source$: Observable<any>, count: number): Observable<any> {
-  return NEVER;
+
+
+  return new Observable((obs) => {
+
+    let i = 0;
+    source$.subscribe({
+      next(val) {
+        if (i > count) {
+          obs.next(val);
+        }
+        i++;
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+
+  });
+
+
+
 }
+
+
+
+
+
 
 function taskSkip() {
   const interval$ = myInterval$(500);
   const withoutFirstSeven$ = mySkip$(interval$, 7);
   withoutFirstSeven$.subscribe(fullObserver('taskSkip'));
 }
+
+
+
+
+
+
+
+
+
 
 
 
