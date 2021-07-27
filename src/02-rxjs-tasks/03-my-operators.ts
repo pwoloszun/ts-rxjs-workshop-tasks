@@ -310,3 +310,54 @@ export function myOperatorsApp() {
   // taskStartsWith();
   // taskWithLatestFrom();
 }
+
+
+myFilter$(
+  myMap$(
+    myInterval$(1000),
+    (i) => i ** 2
+  ),
+  (n) => n % 2 === 0
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function f() {
+  // do something
+};
+
+function g() {
+
+}
+
+
+function other() {
+  const resultG = g();
+  const fResult = f();
+  return resultG + fResult + 10;
+};
+
+
+
+
+
+
+
+
+
+
+
+

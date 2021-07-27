@@ -1,6 +1,18 @@
 // Observable creators
 import { interval, from, range } from 'rxjs';
 
+
+// myInterval$(1000)
+
+// interval(1000)
+
+// myFromArray$
+
+// from(['a', 'b'])
+
+// range(10, 5)
+
+
 // operators
 import {
   map,
@@ -21,8 +33,28 @@ import {
   startWith,
   withLatestFrom,
 } from 'rxjs/operators';
+import { myFromArray$, myInterval$ } from './01-my-observables';
 
 import { fullObserver } from './utils';
+
+// interval(1000).pipe(
+//   map((i) => i * 10),
+//   filter((n) => n % 2 === 0),
+// ).subscribe(fullObserver('test'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // TODO example 1:
 // wez tablice imion ->
@@ -35,9 +67,10 @@ function example1() {
   // TODO
   from(names).pipe(
     takeWhile((name) => name !== 'ADMIN'),
-    map((name) => `Hello ${name}`),
+    map((name) => `Hello ${name}!`),
     delay(1200)
   ).subscribe(fullObserver('example1'));
+
 }
 
 // TODO example 3:
@@ -120,7 +153,7 @@ function task6() {
 }
 
 export function builtInApp() {
-  // example1();
+  example1();
   // example2();
   // example3();
   // task1();
