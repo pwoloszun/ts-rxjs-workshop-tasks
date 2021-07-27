@@ -194,9 +194,11 @@ function rangeTask() {
 }
 
 
-// setInterval(() => {
-
+// const intervalid = setInterval(() => {
+//   //do smth
 // }, 2000);
+
+// clearInterval(intervalid);
 
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
@@ -209,6 +211,7 @@ export function myInterval$(delayInMs: number): Observable<number> {
       i += 1;
     }, delayInMs);
 
+    // cleanup
   });
 
 }

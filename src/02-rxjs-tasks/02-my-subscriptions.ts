@@ -21,5 +21,5 @@ function task1() {
 
 export function mySubscriptionsApp() {
   example1();
-  // task1();
+  task1();
 }
