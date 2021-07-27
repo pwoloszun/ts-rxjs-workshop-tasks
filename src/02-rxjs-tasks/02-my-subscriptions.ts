@@ -19,7 +19,7 @@ function example1() {
 function task1() {
   // TODO
   // create interval stream with delay = 1000ms
-  const interval$ = myInterval$(1000);
+  const interval$ = myInterval$(500);
 
   // subscribe
   const sub = interval$.subscribe(
@@ -28,11 +28,13 @@ function task1() {
 
   // async after 3,5s unsub
   setTimeout(() => {
+    console.log('unsub interv');
+
     sub.unsubscribe();
   }, 3500);
 }
 
 export function mySubscriptionsApp() {
-  example1();
+  // example1();
   task1();
 }

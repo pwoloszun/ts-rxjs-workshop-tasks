@@ -206,12 +206,15 @@ export function myInterval$(delayInMs: number): Observable<number> {
   return new Observable((obs) => {
     let i = 0;
 
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       obs.next(i);
       i += 1;
     }, delayInMs);
 
     // cleanup
+    return () => {
+      clearInterval(intervalId);
+    };
   });
 
 }
