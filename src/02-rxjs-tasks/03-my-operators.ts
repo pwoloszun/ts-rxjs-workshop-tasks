@@ -208,7 +208,23 @@ function taskFirst() {
 
 // TODO task: myReduce$
 function myReduce$(source$: Observable<any>, accumulatorFn: Function, startValue: any): Observable<any> {
-  return NEVER;
+
+  return new Observable((obs) => {
+    let memo = startValue;
+    source$.subscribe({
+      next(val) {
+        memo = accumulatorFn(memo, val);
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.next(memo);
+        obs.complete();
+      },
+    });
+  });
+
 }
 
 function taskReduce() {
@@ -289,8 +305,8 @@ export function myOperatorsApp() {
   // taskFilter();
   // taskTakeWhile();
   // taskFirst();
-  // taskReduce();
-  taskBufferCount();
+  taskReduce();
+  // taskBufferCount();
   // taskStartsWith();
   // taskWithLatestFrom();
 }
