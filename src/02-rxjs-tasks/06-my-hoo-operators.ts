@@ -79,6 +79,7 @@ function exampleMySwitchAll() {
 
   mySwitchAll$(higherOrderStream$)
     .subscribe(fullObserver('mySwitchAll$'));
+  // A0, A1, A2, B0, C0, C1
 }
 
 
