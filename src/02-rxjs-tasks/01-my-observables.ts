@@ -75,7 +75,9 @@ function example1() {
 
 
 //======
-
+setTimeout(() => {
+  // do smth
+}, 2000);
 
 
 // TODO myTimeout$()
@@ -108,7 +110,17 @@ function timeoutTask() {
 
 // TODO task: myFullObserver(tag)
 function myFullObserver(tag: string): Observer<any> {
-  return null as any as Observer<any>;
+  return {
+    next(value) {
+      console.log(`NEXT ${tag}`, value);
+    },
+    error(err) {
+      console.log(`ERROR ${tag}`, err);
+    },
+    complete() {
+      console.log(`COMPLETE ${tag}`);
+    },
+  };
 }
 
 // TODO task: myFromArray$
@@ -146,8 +158,8 @@ export function myRange$(startValue: number, count: number): Observable<number> 
 }
 
 function rangeTask() {
-  myRange$(5, 7)
-    .subscribe(myFullObserver('rangeTask'));
+  const range$ = myRange$(5, 7);
+  range$.subscribe(myFullObserver('rangeTask'));
 }
 
 
@@ -224,8 +236,8 @@ export function myObservablesApp() {
   // example1();
   // timeoutTask();
   // intervalTask();
-  fromArrayTask();
+  // fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
-  // rangeTask();
+  rangeTask();
 }
