@@ -134,6 +134,13 @@ function taskMap() {
   greetings$.subscribe(fullObserver('greetings'));
 }
 
+
+
+
+
+
+
+
 // TODO task: myFilter$
 function myFilter$(source$: Observable<any>, filteringFn: Function): Observable<any> {
   return NEVER;
@@ -227,9 +234,9 @@ function taskWithLatestFrom() {
 }
 
 export function myOperatorsApp() {
-  taskTake();
-  taskSkip();
-  // taskMap();
+  // taskTake();
+  // taskSkip();
+  taskMap();
   // taskFilter();
   // taskTakeWhile();
   // taskFirst();
