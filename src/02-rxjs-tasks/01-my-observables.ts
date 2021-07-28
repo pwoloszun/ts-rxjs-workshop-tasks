@@ -1,4 +1,5 @@
 import { Observable, Observer, NEVER } from 'rxjs';
+import { fullObserver } from './utils/index';
 
 export function myCustom$(name: string): Observable<string> {
 
@@ -239,6 +240,10 @@ function fromArrayWithDelayTask() {
   myFromArrayWithDelay$(values, 800)
     .subscribe(myFullObserver('fromArrayWithDelayTask'));
 }
+
+
+// const MY_NEVER = new Observable((obs) => {});
+// MY_NEVER.subscribe(fullObserver('my never'));
 
 function myThrow$(error: Error) {
 

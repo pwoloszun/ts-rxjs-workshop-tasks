@@ -68,5 +68,11 @@ function finalizeExample() {
 export function catchRetryTaskApp() {
   // throwExample();
   // catchExample();
-  finalizeExample();
+  // finalizeExample();
+
+
+  console.log('BEFORE never');
+  NEVER.subscribe(fullObserver('never'));
+  console.log('AFTER never');
+
 }
