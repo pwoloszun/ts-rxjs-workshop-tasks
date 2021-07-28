@@ -3,13 +3,25 @@ import { ajax } from "rxjs/ajax";
 
 import { fullObserver } from "./utils";
 
+
+
+
+// const userData = {name: 'bob'};
+
+// const user$ = of(userData).pipe(
+
+// ).subscribe();
+
 function subjectIsBothStreamAndObserver() {
   const mySubject = new Subject();
 
   mySubject.subscribe(fullObserver('1st Observer'));
-  mySubject.subscribe(fullObserver('2nd Observer'));
 
   mySubject.next(123);
+
+  mySubject.subscribe(fullObserver('2nd Observer'));
+
+
   mySubject.next('hello everybody!');
   mySubject.complete();
 }
@@ -69,5 +81,5 @@ function getNLatesValuesSubject() {
 export function subjectExamplesApp() {
   // subjectIsBothStreamAndObserver();
   // getLatestValueSubject();
-  // getNLatesValuesSubject();
+  getNLatesValuesSubject();
 }

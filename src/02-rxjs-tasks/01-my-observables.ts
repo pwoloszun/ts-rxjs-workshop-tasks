@@ -1,39 +1,33 @@
 import { Observable, Observer, NEVER } from 'rxjs';
 import { fullObserver } from './utils/index';
 
-export function myCustom$(name: string): Observable<string> {
+export function myCustom$(): Observable<number> {
 
-  return new Observable((obs) => {
-    console.log('generating Observable');
-    // next
-    obs.next('qq 1');
+  let i = 0; // state stream
+  // pseudo code
+  // const subscribersList = [];
 
-    obs.complete();
-    obs.error(new Error(`ola boga!`));
-    // throw new Error(`ola boga!`);
+  return new Observable((obs: Observer<number>) => {
+
+    setInterval(() => {
+      obs.next(i++);
+    }, 1000)
 
   });
 
 }
 
+
+
+
+
 function example1() {
-  console.log('exmpl 1');
 
-  const custom$ = myCustom$('bob'); // nothing happens
+  const custom$ = myCustom$(); // nothing happens
 
-  custom$.subscribe({
-    next(value) {
-      console.log('NEXT example 1', value);
-    },
+  custom$.subscribe(fullObserver('1st subscriber'));
+  custom$.subscribe(fullObserver('2nd subscriber'));
 
-    error(err) {
-      console.log('ERROR example 1', err);
-    },
-
-    complete() {
-      console.log('COMPLETE example 1');
-    },
-  });
 
   // custom$.subscribe(
   //   (value) => {},
@@ -268,11 +262,11 @@ function throwTask() {
 // TODO task: myTimer$
 
 export function myObservablesApp() {
-  // example1();
+  example1();
   // timeoutTask();
   // intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
-  throwTask();
-  rangeTask();
+  // throwTask();
+  // rangeTask();
 }

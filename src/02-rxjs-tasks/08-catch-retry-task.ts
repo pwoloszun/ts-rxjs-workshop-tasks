@@ -44,7 +44,7 @@ function fakeApiCall$() {
 function catchExample() {
   const apiCall$ = fakeApiCall$()
   apiCall$.pipe(
-    retry(2),
+    retry(),
     catchError((error) => {
       console.log('err catched');
       return NEVER;
