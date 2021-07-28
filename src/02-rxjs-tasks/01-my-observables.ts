@@ -7,17 +7,6 @@ export function myCustom$(name: string): Observable<string> {
     // next
     obs.next('qq 1');
 
-    setTimeout(() => {
-      console.log('async call');
-
-      obs.next('qq 2');
-      obs.next('qq 3');
-    }, 2000);
-
-    obs.next('qq 4');
-
-    // error
-    // complete
     obs.complete();
     obs.error(new Error(`ola boga!`));
     // throw new Error(`ola boga!`);
