@@ -6,6 +6,7 @@ function example1() {
   const subscription = timeout$.subscribe(fullObserver('unsubscribe timeout'));
 
   setTimeout(() => {
+    console.log('UNSUBSCRIBE:',);
     subscription.unsubscribe();
   }, 2000);
 }
@@ -16,6 +17,6 @@ function task1() {
 }
 
 export function mySubscriptionsApp() {
-  // example1();
+  example1();
   // task1();
 }

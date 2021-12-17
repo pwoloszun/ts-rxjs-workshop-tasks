@@ -85,10 +85,16 @@ function example1() {
 export function myTimeout$(delayInMs: number): Observable<void> {
 
   return new Observable((obs) => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
+      // console.log('timout emit value:',);
       obs.next();
       obs.complete();
     }, delayInMs);
+
+    return () => { // cleanup: triggers ALWAYS on COMPLETE/ERROR/unsubscribe
+      // console.log('CLEANUP:',);
+      clearTimeout(timeoutId);
+    };
   });
 
 }
