@@ -26,8 +26,6 @@ import { Observable, Observer, NEVER } from 'rxjs';
 export function myCustom$(name: string): Observable<string> {
 
   return new Observable(function (obs) {
-    // console.log('generating Observable');
-    // next
     obs.next('a qq!');
 
     setTimeout(() => {
@@ -38,13 +36,6 @@ export function myCustom$(name: string): Observable<string> {
 
     // throw new Error(`Ola boga!`);
     // obs.error(new Error(`Ola boga!`));
-
-    // obs.complete();
-    // obs.next('a qq! 4thnd');
-    // obs.complete();
-
-    // error
-    // complete
   });
 
 }
@@ -63,6 +54,15 @@ function example1() {
       console.log('ERROR client code', err);
     }
   });
+
+  setTimeout(() => {
+
+    custom$.subscribe({
+      next(value) {
+        console.log('NEXT ==2nd== client code:', value);
+      },
+    });
+  }, 3000);
 
 
   // custom$.subscribe((value: string) => console.log('[NEXT] timeout', value));
@@ -83,7 +83,14 @@ function example1() {
 
 // TODO myTimeout$()
 export function myTimeout$(delayInMs: number): Observable<void> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    setTimeout(() => {
+      obs.next();
+      obs.complete();
+    }, delayInMs);
+  });
+
 }
 
 function timeoutTask() {
@@ -101,6 +108,12 @@ function timeoutTask() {
 
   });
 }
+
+
+
+
+
+
 
 // TODO task: myFullObserver(tag)
 function myFullObserver(tag: string): Observer<any> {
@@ -167,8 +180,9 @@ function throwTask() {
 // TODO task: myTimer$
 
 export function myObservablesApp() {
-  example1();
-  // timeoutTask();
+  // example1();
+
+  timeoutTask();
   // intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
