@@ -1,21 +1,81 @@
 import { Observable, Observer, NEVER } from 'rxjs';
 
+
+// const arr = [];
+
+// PULL
+// function clientCode() {
+//   for (let index = 0; index < arr.length; index++) {
+//     const element = arr.getItem();
+//     // do smth with el
+//   }
+// }
+
+
+// // observer DP
+// const subject = {}
+
+// //PUSH
+// function clientCodePush() {
+//   subject.subscribe((element) => {
+//     // do smth with el
+//   });
+// }
+
+
 export function myCustom$(name: string): Observable<string> {
+
   return new Observable(function (obs) {
-    console.log('generating Observable');
+    // console.log('generating Observable');
     // next
+    obs.next('a qq!');
+
+    setTimeout(() => {
+      obs.next('a qq! 2nd');
+    }, 2000);
+
+    obs.next('a qq! 3rd');
+
+    // throw new Error(`Ola boga!`);
+    // obs.error(new Error(`Ola boga!`));
+
+    // obs.complete();
+    // obs.next('a qq! 4thnd');
+    // obs.complete();
+
     // error
     // complete
   });
+
 }
 
 function example1() {
   const custom$ = myCustom$('bob'); // nothing happens
+
+  custom$.subscribe({
+    next(value) {
+      console.log('NEXT client code:', value);
+    },
+    complete() {
+      console.log('COMPLETE client code');
+    },
+    error(err) {
+      console.log('ERROR client code', err);
+    }
+  });
+
+
   // custom$.subscribe((value: string) => console.log('[NEXT] timeout', value));
   // TODO 1b: next(), error(), complete()
   // TODO 2: each subscribe call generating fn
   // custom$.subscribe(fullObserver('example1'));
 }
+
+
+
+
+
+
 
 
 //======
@@ -107,7 +167,7 @@ function throwTask() {
 // TODO task: myTimer$
 
 export function myObservablesApp() {
-  // example1();
+  example1();
   // timeoutTask();
   // intervalTask();
   // fromArrayTask();
