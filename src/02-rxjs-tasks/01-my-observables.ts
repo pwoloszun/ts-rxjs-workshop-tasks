@@ -142,9 +142,9 @@ function rangeTask() {
 }
 
 
-setInterval(() => {
+// setInterval(() => {
 
-}, 2000);
+// }, 2000);
 
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
