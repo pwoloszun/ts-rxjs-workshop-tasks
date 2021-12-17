@@ -148,7 +148,13 @@ function taskFirst() {
 }
 
 // TODO task: myReduce$
-function myReduce$(source$: Observable<any>, accumulatorFn: Function, startValue: any): Observable<any> {
+type AccumulatorFn<T, K> = (memo: T, item: K) => T;
+
+function myReduce$<T, K>(
+  source$: Observable<K>,
+  accumulatorFn: AccumulatorFn<T, K>,
+  startValue: T
+): Observable<T> {
   return NEVER;
 }
 
@@ -156,10 +162,10 @@ function taskReduce() {
   const numbers$ = myFromArray$([3, 4, 10]);
   const mltpResult$ = myReduce$(
     numbers$,
-    (memo: any, item: any) => memo * item,
+    (memo, item) => memo * item,
     -5
   );
-  mltpResult$.subscribe(fullObserver('taskReduce'));
+  mltpResult$.subscribe(fullObserver('taskReduce')); // -600, COMPL
 }
 
 // TODO myBufferCount$
@@ -171,9 +177,9 @@ function taskBufferCount() {
   const values$ = myRange$(0, 67);
   myBufferCount$(values$, 25)
     .subscribe(fullObserver('taskBufferCount'));
-    // [0..24]
-    // [25..49]
-    // [50..66]
+  // [0..24]
+  // [25..49]
+  // [50..66]
 }
 
 function myStartsWith$(source$: Observable<any>, startValue: any) {
