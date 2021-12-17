@@ -121,14 +121,26 @@ function myFullObserver(tag: string): Observer<any> {
 }
 
 // TODO task: myFromArray$
-export function myFromArray$(items: any[]): Observable<any> {
+export function myFromArray$<T>(items: T[]): Observable<T> {
   return NEVER; // TODO
 }
 
 function fromArrayTask() {
   const names = ['bob', 'ed', 'kate'];
-  myFromArray$(names)
-    .subscribe(myFullObserver('fromArrayTask'));
+  const array$ = myFromArray$(names);
+
+  array$.subscribe({
+    next(value) {
+      console.log('NEXT fromArrayTask', value);
+    },
+    error(err) {
+      console.log('ERROR fromArrayTask', err);
+    },
+    complete() {
+      console.log('COMPLETE fromArrayTask');
+    },
+
+  });
 }
 
 // TODO task: myRange$
