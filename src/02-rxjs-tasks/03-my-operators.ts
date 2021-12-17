@@ -6,14 +6,12 @@ import { fullObserver } from './utils';
 export function myTake$(source$: Observable<any>, count: number) {
 
   return new Observable((obs) => {
-
     let i = 0;
     const srcSubscription = source$.subscribe({
       next(val) {
         if (i < count) {
           obs.next(val);
           i += 1;
-
         } else {
           obs.complete();
         }
@@ -56,13 +54,41 @@ function taskTake() {
 
 // TODO task: mySkip$
 function mySkip$(source$: Observable<any>, count: number): Observable<any> {
-  return NEVER;
+
+  return new Observable((obs) => {
+    let i = 0;
+
+    const srcSubscription = source$.subscribe({
+      next(val) {
+        if (i >= count) {
+          obs.next(val);
+        } else {
+          i += 1;
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      }
+    });
+
+    return () => {
+      srcSubscription.unsubscribe();
+    };
+  });
+
 }
 
 function taskSkip() {
-  const interval$ = myInterval$(500);
-  const withoutFirstSeven$ = mySkip$(interval$, 7);
-  withoutFirstSeven$.subscribe(fullObserver('taskSkip'));
+  // const interval$ = myInterval$(500);
+  // const withoutFirstSeven$ = mySkip$(interval$, 7);
+  // withoutFirstSeven$.subscribe(fullObserver('taskSkip'));
+
+  const arr$ = myFromArray$(['a', 'b', 'c']);
+  const skippedFirstTwo$ = mySkip$(arr$, 2);
+  skippedFirstTwo$.subscribe(fullObserver('skippedFirstTwo'));
 }
 
 // TODO task: myMap$
@@ -173,8 +199,8 @@ function taskWithLatestFrom() {
 }
 
 export function myOperatorsApp() {
-  taskTake();
-  // taskSkip();
+  // taskTake();
+  taskSkip();
   // taskMap();
   // taskFilter();
   // taskTakeWhile();
