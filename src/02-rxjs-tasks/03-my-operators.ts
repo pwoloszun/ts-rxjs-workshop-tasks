@@ -4,18 +4,55 @@ import { myFromArray$, myInterval$, myRange$ } from './01-my-observables';
 import { fullObserver } from './utils';
 
 export function myTake$(source$: Observable<any>, count: number) {
-  return new Observable(function (obs) {
-    // TODO 1: impl
 
-    // TODO 2: clear up
+  return new Observable((obs) => {
+
+    let i = 0;
+    const srcSubscription = source$.subscribe({
+      next(val) {
+        if (i < count) {
+          obs.next(val);
+          i += 1;
+
+        } else {
+          obs.complete();
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      }
+    });
+
+    return () => {
+      srcSubscription.unsubscribe();
+    };
   });
+
 }
 
 function taskTake() {
   const interval$ = myInterval$(500);
   const firstFour$ = myTake$(interval$, 4);
   firstFour$.subscribe(fullObserver('taskTake'));
+
+  // const arr$ = myFromArray$(['a', 'b']);
+  // const firstTen$ = myTake$(arr$, 10);
+  // firstTen$.subscribe(fullObserver('firstTen'));
 }
+
+
+
+
+
+
+
+
+
+
+
 
 // TODO task: mySkip$
 function mySkip$(source$: Observable<any>, count: number): Observable<any> {
