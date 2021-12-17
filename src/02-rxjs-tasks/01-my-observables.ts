@@ -141,6 +141,8 @@ function fromArrayTask() {
     },
 
   });
+
+  array$.subscribe(myFullObserver('fromArrayTask'));
 }
 
 // TODO task: myRange$
