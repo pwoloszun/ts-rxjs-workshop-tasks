@@ -34,13 +34,13 @@ export function myTake$(source$: Observable<any>, count: number) {
 }
 
 function taskTake() {
-  const interval$ = myInterval$(500);
-  const firstFour$ = myTake$(interval$, 4);
-  firstFour$.subscribe(fullObserver('taskTake'));
+  // const interval$ = myInterval$(500);
+  // const firstFour$ = myTake$(interval$, 4);
+  // firstFour$.subscribe(fullObserver('taskTake'));
 
-  // const arr$ = myFromArray$(['a', 'b']);
-  // const firstTen$ = myTake$(arr$, 10);
-  // firstTen$.subscribe(fullObserver('firstTen'));
+  const arr$ = myFromArray$(['a', 'b']);
+  const firstTen$ = myTake$(arr$, 10);
+  firstTen$.subscribe(fullObserver('firstTen'));
 }
 
 
