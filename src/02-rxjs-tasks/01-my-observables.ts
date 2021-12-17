@@ -148,7 +148,16 @@ function rangeTask() {
 
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    let i = 0; // cold
+    setInterval(() => {
+      obs.next(i);
+      i += 1;
+    }, delayInMs);
+  });
+
+
 }
 
 function intervalTask() {
@@ -166,6 +175,15 @@ function intervalTask() {
     },
 
   });
+
+  setTimeout(() => {
+    interval$.subscribe({
+      next(value) {
+        console.log('NEXT intervalTask OTHER', value);
+      },
+    });
+  }, 2500);
+
 }
 
 function myFromArrayWithDelay$(items: any[], delayInMs: number): Observable<any> {
@@ -199,8 +217,8 @@ function throwTask() {
 export function myObservablesApp() {
   // example1();
 
-  timeoutTask();
-  // intervalTask();
+  // timeoutTask();
+  intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
