@@ -141,14 +141,31 @@ function rangeTask() {
     .subscribe(myFullObserver('rangeTask'));
 }
 
+
+setInterval(() => {
+
+}, 2000);
+
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
   return NEVER; // TODO
 }
 
 function intervalTask() {
-  myInterval$(1000)
-    .subscribe(myFullObserver('intervalTask'));
+  const interval$ = myInterval$(1000);
+
+  interval$.subscribe({
+    next(value) {
+      console.log('NEXT intervalTask', value);
+    },
+    error(err) {
+      console.log('ERROR intervalTask', err);
+    },
+    complete() {
+      console.log('COMPLETE intervalTask');
+    },
+
+  });
 }
 
 function myFromArrayWithDelay$(items: any[], delayInMs: number): Observable<any> {
