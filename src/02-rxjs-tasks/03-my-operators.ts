@@ -107,7 +107,7 @@ function taskMap() {
 }
 
 // TODO task: myFilter$
-function myFilter$(source$: Observable<any>, filteringFn: Function): Observable<any> {
+function myFilter$(source$: Observable<any>, filteringFn: (el: any) => boolean): Observable<any> {
   return NEVER;
 }
 
@@ -171,6 +171,9 @@ function taskBufferCount() {
   const values$ = myRange$(0, 67);
   myBufferCount$(values$, 25)
     .subscribe(fullObserver('taskBufferCount'));
+    // [0..24]
+    // [25..49]
+    // [50..66]
 }
 
 function myStartsWith$(source$: Observable<any>, startValue: any) {
