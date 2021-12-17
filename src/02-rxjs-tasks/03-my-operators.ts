@@ -93,7 +93,24 @@ function taskSkip() {
 
 // TODO task: myMap$
 function myMap$(source$: Observable<any>, mappingFn: Function): Observable<any> {
-  return NEVER;
+  return new Observable((obs) => {
+    const srcSubscription = source$.subscribe({
+      next(val) {
+        const mappedValue = mappingFn(val);
+        obs.next(mappedValue);
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      }
+    });
+
+    return () => {
+      srcSubscription.unsubscribe();
+    };
+  });
 }
 
 function taskMap() {
@@ -108,7 +125,25 @@ function taskMap() {
 
 // TODO task: myFilter$
 function myFilter$(source$: Observable<any>, filteringFn: (el: any) => boolean): Observable<any> {
-  return NEVER;
+  return new Observable((obs) => {
+    const srcSubscription = source$.subscribe({
+      next(val) {
+        if (filteringFn(val)) {
+          obs.next(val);
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      }
+    });
+
+    return () => {
+      srcSubscription.unsubscribe();
+    };
+  });
 }
 
 function taskFilter() {
@@ -155,7 +190,27 @@ function myReduce$<T, K>(
   accumulatorFn: AccumulatorFn<T, K>,
   startValue: T
 ): Observable<T> {
-  return NEVER;
+
+  return new Observable((obs) => {
+    let memo = startValue;
+
+    const srcSubscription = source$.subscribe({
+      next(val) {
+        memo = accumulatorFn(memo, val);
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.next(memo);
+        obs.complete();
+      }
+    });
+
+    return () => {
+      srcSubscription.unsubscribe();
+    };
+  });
 }
 
 function taskReduce() {
@@ -170,7 +225,32 @@ function taskReduce() {
 
 // TODO myBufferCount$
 function myBufferCount$(source$: Observable<any>, bufferSize: number) {
-  return NEVER;
+  return new Observable((obs) => {
+    let buffer: any[] = [];
+
+    const srcSubscription = source$.subscribe({
+      next(val) {
+        buffer.push(val);
+        if (buffer.length >= bufferSize) {
+          obs.next(buffer);
+          buffer = [];
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        if (buffer.length > 0) {
+          obs.next(buffer);
+        }
+        obs.complete();
+      }
+    });
+
+    return () => {
+      srcSubscription.unsubscribe();
+    };
+  });
 }
 
 function taskBufferCount() {
