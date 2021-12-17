@@ -117,30 +117,35 @@ function timeoutTask() {
 
 // TODO task: myFullObserver(tag)
 function myFullObserver(tag: string): Observer<any> {
-  return null as any as Observer<any>;
+  return {
+    next(value) {
+      console.log(`NEXT ${tag}'`, value);
+    },
+    error(err) {
+      console.log(`ERROR ${tag}`, err);
+    },
+    complete() {
+      console.log(`COMPLETE ${tag}`);
+    },
+  };
 }
 
 // TODO task: myFromArray$
 export function myFromArray$<T>(items: T[]): Observable<T> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    for (let index = 0; index < items.length; index++) {
+      const element = items[index];
+      obs.next(element);
+    }
+    obs.complete();
+  });
+
 }
 
 function fromArrayTask() {
   const names = ['bob', 'ed', 'kate'];
   const array$ = myFromArray$(names);
-
-  array$.subscribe({
-    next(value) {
-      console.log('NEXT fromArrayTask', value);
-    },
-    error(err) {
-      console.log('ERROR fromArrayTask', err);
-    },
-    complete() {
-      console.log('COMPLETE fromArrayTask');
-    },
-
-  });
 
   array$.subscribe(myFullObserver('fromArrayTask'));
 }
@@ -152,7 +157,7 @@ export function myRange$(startValue: number, count: number): Observable<number> 
 
 function rangeTask() {
   myRange$(5, 7)
-    .subscribe(myFullObserver('rangeTask'));
+    .subscribe(myFullObserver('rangeTask')); // 5..11
 }
 
 
@@ -232,8 +237,8 @@ export function myObservablesApp() {
   // example1();
 
   // timeoutTask();
-  intervalTask();
-  // fromArrayTask();
+  // intervalTask();
+  fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
   // rangeTask();
