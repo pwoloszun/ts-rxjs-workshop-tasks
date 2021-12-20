@@ -94,8 +94,25 @@ function exampleMyConcatAll() {
 }
 
 // TODO: mySwitchAll$
-function mySwitchAll$($sourceHoo: Observable<Observable<any>>) {
-  return new Observable(function () {
+function mySwitchAll$(sourceHoo$: Observable<Observable<any>>) {
+
+  return new Observable(function (obs) {
+    let innerSubscription: Subscription;
+
+    sourceHoo$.subscribe({
+      next(inner$) {
+        if (innerSubscription) {
+          innerSubscription.unsubscribe();
+        }
+
+        inner$.subscribe({
+          next(value) {
+            obs.next(value);
+          }
+        });
+      }
+    });
+
   });
 }
 
