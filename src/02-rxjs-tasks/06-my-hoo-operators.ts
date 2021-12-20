@@ -142,7 +142,9 @@ function exampleMyExhaustAll() {
   const a$ = letterStream$('A', { delayInMs: 600, count: 5 });
   const b$ = letterStream$('B', { delayInMs: 1500, count: 3 });
   const c$ = letterStream$('C', { delayInMs: 1500, count: 2 });
-  const arr$ = [a$, b$, c$];
+  const d$ = letterStream$('D', { delayInMs: 1500, count: 2 });
+
+  const arr$ = [a$, b$, c$, d$];
   const higherOrderStream$ = interval(2000).pipe(
     take(arr$.length),
     map((i) => arr$[i])
@@ -150,12 +152,13 @@ function exampleMyExhaustAll() {
 
   myExhaustAll$(higherOrderStream$)
     .subscribe(fullObserver('exampleMyExhaustAll'));
+  // => A-0..A-4 C-0 C-1
 }
 
 
 export function myHooOperatorsApp() {
   // exampleMyMergeAll();
   // exampleMyConcatAll();
-  exampleMySwitchAll();
-  // exampleMyExhaustAll();
+  // exampleMySwitchAll();
+  exampleMyExhaustAll();
 }
