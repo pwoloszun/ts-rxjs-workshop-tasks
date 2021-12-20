@@ -87,10 +87,20 @@ function myConcatAll$($sourceHoo: Observable<Observable<any>>) {
 function exampleMyConcatAll() {
   const a$ = letterStream$('A', { delayInMs: 600, count: 5 });
   const b$ = letterStream$('B', { delayInMs: 1500, count: 3 });
-  const higherOrderStream$ = from([a$, b$]);
+  const innerArr$ = [a$, b$];
 
+  const higherOrderStream$ = from(innerArr$);
   myConcatAll$(higherOrderStream$)
     .subscribe(fullObserver('exampleMyConcatAll'));
+  // A-0..A-4 B-0..B-2
+
+  const higherOrderStreamSec$ = interval(5000).pipe(
+    take(innerArr$.length),
+    map((i) => innerArr$[i])
+  );
+  myConcatAll$(higherOrderStreamSec$)
+    .subscribe(fullObserver('exampleMyConcatAll'));
+  // A-0..A-4 B-0..B-2
 }
 
 // TODO: mySwitchAll$
@@ -134,6 +144,7 @@ function exampleMySwitchAll() {
 
 // TODO: myExhaustAll$
 function myExhaustAll$($sourceHoo: Observable<Observable<any>>) {
+  let isSmth = true;
   return new Observable(function () {
   });
 }
@@ -160,5 +171,13 @@ export function myHooOperatorsApp() {
   // exampleMyMergeAll();
   // exampleMyConcatAll();
   // exampleMySwitchAll();
-  exampleMyExhaustAll();
+  // exampleMyExhaustAll();
+
+  const my$ = of(123);
+  const sub = my$.subscribe(fullObserver('qq'));
+
+  setTimeout(() => {
+    console.log('sub:', sub.closed);
+  }, 1000);
+
 }
