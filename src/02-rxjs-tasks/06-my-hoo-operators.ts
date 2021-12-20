@@ -19,9 +19,11 @@ export function myMergeAll$<T>(sourceHoo$: Observable<Observable<T>>): Observabl
 
     sourceHoo$.subscribe({
       next(inner$) {
+        console.log('HOO next:',);
         innerOpenedCount += 1;
         inner$.subscribe({
           next(value) {
+            console.log('inner$ next:',);
             obs.next(value);
           },
           error(err) {
