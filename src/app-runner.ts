@@ -51,6 +51,7 @@ export class AppRunner {
     // mySubscriptionsApp();
     // myOperatorsApp();
     // builtInApp();
-    combineMultipleStreamsApp();
+    // combineMultipleStreamsApp();
+    myHooOperatorsApp();
   }
 }
