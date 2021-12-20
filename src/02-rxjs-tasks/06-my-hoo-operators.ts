@@ -143,10 +143,44 @@ function exampleMySwitchAll() {
 
 
 // TODO: myExhaustAll$
-function myExhaustAll$($sourceHoo: Observable<Observable<any>>) {
-  let isSmth = true;
-  return new Observable(function () {
+function myExhaustAll$(sourceHoo$: Observable<Observable<any>>) {
+
+  // return new Observable(function (obs) {
+  //   let isInnerRunning = false;
+
+  //   sourceHoo$.subscribe({
+  //     next(inner$) {
+  //       if (!isInnerRunning) {
+  //         isInnerRunning = true;
+  //         inner$.subscribe({
+  //           next(value) {
+  //             obs.next(value);
+  //           },
+  //           complete() {
+  //             isInnerRunning = false;
+  //           }
+  //         });
+  //       }
+  //     }
+  //   });
+  // });
+
+  return new Observable(function (obs) {
+    let innerSubscription: Subscription;
+
+    sourceHoo$.subscribe({
+      next(inner$) {
+        if (!innerSubscription || innerSubscription.closed) {
+          innerSubscription = inner$.subscribe({
+            next(value) {
+              obs.next(value);
+            },
+          });
+        }
+      }
+    });
   });
+
 }
 
 function exampleMyExhaustAll() {
@@ -171,13 +205,5 @@ export function myHooOperatorsApp() {
   // exampleMyMergeAll();
   // exampleMyConcatAll();
   // exampleMySwitchAll();
-  // exampleMyExhaustAll();
-
-  const my$ = of(123);
-  const sub = my$.subscribe(fullObserver('qq'));
-
-  setTimeout(() => {
-    console.log('sub:', sub.closed);
-  }, 1000);
-
+  exampleMyExhaustAll();
 }
