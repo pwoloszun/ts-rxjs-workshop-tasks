@@ -83,7 +83,7 @@ function exampleMyExhaustAll() {
 
 
 export function myHooOperatorsApp() {
-  // exampleMyMergeAll();
+  exampleMyMergeAll();
   // exampleMyConcatAll();
   // exampleMySwitchAll();
   // exampleMyExhaustAll();

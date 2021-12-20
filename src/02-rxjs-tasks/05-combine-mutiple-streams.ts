@@ -15,7 +15,10 @@ function mergeExample() {
   const medium$ = myStream$('medium', 1000);
   const slow$ = myStream$('slow', 2200);
 
-  merge(slow$, quick$).subscribe(fullObserver('merge'));
+  merge(
+    medium$,
+    quick$
+  ).subscribe(fullObserver('merge'));
 }
 
 function concatExample() {
@@ -84,7 +87,7 @@ function task2() {
 export function combineMultipleStreamsApp() {
   // mergeExample();
   // concatExample();
-  // raceExample();
+  raceExample();
   // testUserTransactions();
   // task1();
   // task2();

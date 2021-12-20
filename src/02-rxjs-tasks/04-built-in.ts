@@ -135,6 +135,8 @@ function task4() {
 // buforuj wyniki i wydawaj je za kazdym razem gdy everyTwoSeconds$ cos emituje
 // wyniki zaloguj na konsoli
 function task5() {
+  const everyTwoSeconds$ = interval(2000);
+
 }
 
 // TODO task 6:
@@ -155,13 +157,32 @@ function task6() {
 }
 
 export function builtInApp() {
-  example1();
+  // example1();
   // example2();
   // example3();
   // task1();
   // task2();
   // task3();
   // task4();
-  // task5();
+  task5();
   // task6();
+
+
+  const arr = [1, 2, 3, 4];
+  arr.reduce((memo, item) => memo + item);
+
+
+  const int$ = interval(500).pipe(
+    // take(5)
+  );
+
+  // int$.pipe(
+  //   reduce((memo, item) => memo + item)
+  // ).subscribe(fullObserver('reduce exmpl'));
+
+  // int$.pipe(
+  //   scan((memo, item) => memo + item),
+  //   takeLast(1)
+  // ).subscribe(fullObserver('scane exmpl'));
+
 }

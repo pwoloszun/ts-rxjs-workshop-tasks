@@ -1,4 +1,4 @@
-import { forkJoin, interval, of, from, timer, NEVER } from 'rxjs';
+import { forkJoin, interval, of, from, timer, NEVER, fromEvent } from 'rxjs';
 import {
   concatMap,
   delay,
@@ -14,6 +14,71 @@ import {
 } from 'rxjs/operators';
 
 import { fullObserver, items$, randomBetween } from './utils';
+
+
+
+
+// HOS
+// Higher Order Obserevable
+
+// const btnDom = {} as any;
+// const btnClicks$ = fromEvent(btnDom, 'click');
+
+// function httpGet$(url: string): Obervable<any> {
+//   return null as any;
+// }
+
+
+// btnClicks$.subscribe({
+//   next(value) {
+//     const inner$ = httpGet$('/users/100');
+//     inner$.subscribe({
+//       next(data: any) {
+//         console.log('data from server:', data);
+//       }
+//     });
+//   }
+// });
+
+
+// interval(1000).subscribe({
+//   next(value) { },
+//   error(err) { },
+//   complete() { },
+// });
+
+// interval(1000).subscribe((value) => {
+
+// });
+
+
+
+// liveSearchCtrl.valueChanges$.subscribe({
+//   next(query: string) {
+//     const inner$ = httpSearchByQuery$(query);
+//     inner$.subscribe((searchResults) => {
+//       // here inner data
+//     });
+//   }
+// });
+
+
+// btnClicks$ ----C-------C------
+//                |       |
+//              $inner0   |
+//                      $inner1
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function btnClick$(delay: number, count: number) {
