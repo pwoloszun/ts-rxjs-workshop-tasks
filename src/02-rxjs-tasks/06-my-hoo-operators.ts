@@ -11,7 +11,7 @@ function letterStream$(letter: string, { delayInMs, count }: { delayInMs: number
 }
 
 // TODO: myMergeAll$
-export function myMergeAll$(sourceHoo$: Observable<Observable<any>>) {
+export function myMergeAll$<T>(sourceHoo$: Observable<Observable<T>>): Observable<T> {
 
   return new Observable((obs) => {
     let isHooCompleted = false;
