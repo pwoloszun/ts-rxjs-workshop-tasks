@@ -21,8 +21,42 @@ import {
   startWith,
   withLatestFrom,
 } from 'rxjs/operators';
+// import { myInterval$, myFromArray, myFromArray$ } from './01-my-observables';
 
 import { fullObserver } from './utils';
+
+
+// factory fn
+// const interval$ = myInterval$(1000);
+
+// operators applied
+// const result$ = myBufferCount$(
+//   myFilter$(
+//     myMap$(interval$, (n) => n * 10),
+//     (i) => i % 3 === 0
+//   ),
+//   25
+// );
+
+// myFromArray$(['a', 'b'])
+// from(['a', 'b'])
+
+// const result2$ = interval(1000).pipe(
+//   map((n) => n * 10),
+//   filter((i) => i % 3 === 0),
+//   bufferCount(25)
+// );
+
+// const result3$ = interval(1000)
+//   .pipe(map((n) => n * 10))
+//   .pipe(filter((i) => i % 3 === 0))
+//   .pipe(bufferCount(25));
+
+
+
+
+
+
 
 // TODO example 1:
 // wez tablice imion ->
@@ -37,7 +71,8 @@ function example1() {
     takeWhile((name) => name !== 'ADMIN'),
     map((name) => `Hello ${name}`),
     delay(1200)
-  ).subscribe(fullObserver('example1'));
+  ).subscribe(fullObserver('exmaple1'));
+
 }
 
 // TODO example 3:
@@ -66,8 +101,8 @@ function task1() {
 // stworz interwal co 0.8s ->
 // pomin pierwsza wygenerowana liczbe
 // z pozostalych, wez tylko 10 pierwszych wynikow ->
-// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb ->
-// kazdy posredni wynik zaloguj na konsoli ("side effect")->
+// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb -> SCAN
+// kazdy posredni wynik zaloguj na konsoli ("side effect")-> TAP
 // wez tylko ostatni obliczony wynik ->
 // ostatni iloczyn zaloguj na konsoli
 function task2() {
@@ -120,7 +155,7 @@ function task6() {
 }
 
 export function builtInApp() {
-  // example1();
+  example1();
   // example2();
   // example3();
   // task1();
