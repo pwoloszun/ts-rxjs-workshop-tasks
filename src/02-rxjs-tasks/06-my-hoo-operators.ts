@@ -1,4 +1,4 @@
-import { Observable, Subscription, of, from, interval } from "rxjs";
+import { Observable, Subscription, of, from, interval, observable } from "rxjs";
 import { map, mergeAll, take, } from "rxjs/operators";
 
 import { fullObserver } from "./utils";
@@ -76,9 +76,34 @@ function exampleMyConcatAll() {
 }
 
 // TODO: mySwitchAll$
-function mySwitchAll$($sourceHoo: Observable<Observable<any>>) {
-  return new Observable(function () {
+function mySwitchAll$(sourceHoo$: Observable<Observable<any>>) {
+
+  return new Observable(function (obs) {
+    let innerSub: Subscription | null = null;
+
+    sourceHoo$.subscribe({
+      next(inner$) {
+        if (innerSub) {
+          innerSub.unsubscribe();
+        }
+        innerSub = inner$.subscribe({
+          next(value) {
+            obs.next(value);
+          },
+          error(err) {
+          },
+          complete() {
+          },
+        });
+      },
+      error(err) {
+      },
+      complete() {
+      },
+    });
+
   });
+
 }
 
 function exampleMySwitchAll() {
