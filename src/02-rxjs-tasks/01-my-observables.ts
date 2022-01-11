@@ -239,6 +239,12 @@ function myThrow$(error: Error) {
   });
 }
 
+
+function myNever$() {
+  return new Observable((obs) => {
+  });
+}
+
 function throwTask() {
   myThrow$(new Error('Jakis blad!'))
     .subscribe(myFullObserver('throwTask'));

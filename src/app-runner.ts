@@ -52,6 +52,8 @@ export class AppRunner {
     // myOperatorsApp();
     // builtInApp();
     // combineMultipleStreamsApp();
-    myHooOperatorsApp();
+    // myHooOperatorsApp();
+    // catchRetryTaskApp();
+    subjectExamplesApp();
   }
 }
