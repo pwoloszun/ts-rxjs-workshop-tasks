@@ -10,6 +10,13 @@ function example1() {
   }, 2000);
 }
 
+
+// const intervalId = setInterval(() => {
+
+// }, 20000);
+
+// clearInterval(intervalId)
+
 // TODO: impl unsubscribe to: myInterval$()
 function task1() {
   // TODO
