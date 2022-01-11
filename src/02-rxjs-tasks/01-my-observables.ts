@@ -112,13 +112,19 @@ function rangeTask() {
     .subscribe(myFullObserver('rangeTask'));
 }
 
-setInterval(() => {
 
-}, 2000);
 
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    let i = 0;
+    setInterval(() => {
+      obs.next(i);
+      i += 1;
+    }, delayInMs);
+  });
+
 }
 
 function intervalTask() {
@@ -132,6 +138,20 @@ function intervalTask() {
     },
     complete() {
       console.log('COMPLETE intervalTask');
+    },
+
+  });
+
+
+  interval$.subscribe({
+    next(value) {
+      console.log('NEXT intervalTask 2nd', value);
+    },
+    error(err) {
+      console.log('ERROR intervalTask 2nd', err);
+    },
+    complete() {
+      console.log('COMPLETE intervalTask 2nd');
     },
 
   });
