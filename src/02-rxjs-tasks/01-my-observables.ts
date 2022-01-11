@@ -62,10 +62,14 @@ setTimeout(() => {
 export function myTimeout$(delayInMs: number): Observable<void> {
 
   return new Observable((obs) => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       obs.next();
       obs.complete();
     }, delayInMs);
+
+    return () => { // cleanup
+      clearTimeout(timeoutId);
+    };
   });
 
 }
