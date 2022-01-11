@@ -170,7 +170,23 @@ function taskFirst() {
 
 // TODO task: myReduce$
 function myReduce$(source$: Observable<any>, accumulatorFn: Function, startValue: any): Observable<any> {
-  return NEVER;
+
+  return new Observable((obs) => {
+    let memo = startValue;
+    source$.subscribe({
+      next(value) {
+        memo = accumulatorFn(memo, value);
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.next(memo);
+        obs.complete();
+      },
+    });
+
+  });
 }
 
 function taskReduce() {
@@ -180,7 +196,7 @@ function taskReduce() {
     (memo: any, item: any) => memo * item,
     -5
   );
-  mltpResult$.subscribe(fullObserver('taskReduce'));
+  mltpResult$.subscribe(fullObserver('taskReduce')); // -600
 }
 
 // TODO myBufferCount$
