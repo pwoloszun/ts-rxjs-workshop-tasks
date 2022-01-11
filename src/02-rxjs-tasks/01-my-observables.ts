@@ -1,29 +1,73 @@
 import { Observable, Observer, NEVER } from 'rxjs';
 
 export function myCustom$(name: string): Observable<string> {
-  return new Observable(function (obs) {
-    console.log('generating Observable');
-    // next
-    // error
-    // complete
+
+  return new Observable((obs) => {
+    obs.next('a qq!');
+
+    setTimeout(() => {
+      obs.next('a qq! 2');
+    }, 2000);
+
+    obs.next('a qq! 3');
+    obs.complete();
+    // obs.error(new Error(`ola boga!`));
+    // throw new Error(`ola boga!`)
   });
+
 }
 
 function example1() {
   const custom$ = myCustom$('bob'); // nothing happens
-  // custom$.subscribe((value: string) => console.log('[NEXT] timeout', value));
+
+  // 
+  custom$.subscribe({
+    next(value) {
+      console.log('NEXT example1:', value);
+    },
+    error(err) {
+      console.log('ERROR example1:', err);
+    },
+    complete() {
+      console.log('COMPLETE example1:');
+    },
+  });
+
+
+  const arr = [1, 2, 3]
+  for (let index = 0; index < arr.length; index++) {
+    const element = arr[index];
+
+  }
+
+
   // TODO 1b: next(), error(), complete()
   // TODO 2: each subscribe call generating fn
   // custom$.subscribe(fullObserver('example1'));
 }
 
 
+
+
+
+
 //======
+
+setTimeout(() => {
+
+}, 2000);
 
 
 // TODO myTimeout$()
 export function myTimeout$(delayInMs: number): Observable<void> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    setTimeout(() => {
+      obs.next();
+      obs.complete();
+    }, delayInMs);
+  });
+
 }
 
 function timeoutTask() {
@@ -108,7 +152,7 @@ function throwTask() {
 
 export function myObservablesApp() {
   // example1();
-  // timeoutTask();
+  timeoutTask();
   // intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
