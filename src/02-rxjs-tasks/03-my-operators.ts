@@ -84,7 +84,21 @@ function taskSkip() {
 
 // TODO task: myMap$
 function myMap$(source$: Observable<any>, mappingFn: Function): Observable<any> {
-  return NEVER;
+  return new Observable((obs) => {
+    source$.subscribe({
+      next(value) {
+        const mappedValue = mappingFn(value);
+        obs.next(mappedValue);
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+
+  });
 }
 
 function taskMap() {
@@ -99,7 +113,23 @@ function taskMap() {
 
 // TODO task: myFilter$
 function myFilter$(source$: Observable<any>, filteringFn: Function): Observable<any> {
-  return NEVER;
+  return new Observable((obs) => {
+    source$.subscribe({
+      next(value) {
+        const isPass = filteringFn(value);
+        if (isPass) {
+          obs.next(value);
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+
+  });
 }
 
 function taskFilter() {
