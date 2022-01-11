@@ -33,7 +33,7 @@ function concatExample() {
 
 function raceExample() {
   const quick$ = myStream$('quick', 400);
-  const medium$ = myStream$('medium', 1000);
+  const medium$ = myStream$('medium', 400);
   const slow$ = myStream$('slow', 2200);
 
   race(quick$, medium$, slow$).subscribe(fullObserver('race'));

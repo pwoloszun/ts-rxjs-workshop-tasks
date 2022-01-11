@@ -11,9 +11,43 @@ function letterStream$(letter: string, { delayInMs, count }: { delayInMs: number
 }
 
 // TODO: myMergeAll$
-export function myMergeAll$(sourceHoo$: Observable<Observable<any>>) {
+export function myMergeAll$<T>(sourceHoo$: Observable<Observable<T>>): Observable<T> {
+
   return new Observable(function (obs) {
+    let isHooCompleted = false;
+    let innerRunningCount = 0;
+
+    sourceHoo$.subscribe({
+      next(inner$) {
+        innerRunningCount += 1;
+        inner$.subscribe({
+          next(value) {
+            obs.next(value);
+          },
+          error(err) {
+            obs.error(err);
+          },
+          complete() {
+            innerRunningCount -= 1;
+            if (innerRunningCount <= 0 && isHooCompleted) {
+              obs.complete();
+            }
+          },
+        });
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        isHooCompleted = true;
+        if (innerRunningCount <= 0) {
+          obs.complete();
+        }
+      },
+    });
+
   });
+
 }
 
 function exampleMyMergeAll() {
@@ -23,6 +57,7 @@ function exampleMyMergeAll() {
 
   myMergeAll$(higherOrderStream$)
     .subscribe(fullObserver('exampleMyMergeAll'));
+  // A-0 A-1 B-0 A-2 A-3 A-4 B-1 B-2 [COMPLETE]
 }
 
 // TODO: myConcatAll$
@@ -83,7 +118,7 @@ function exampleMyExhaustAll() {
 
 
 export function myHooOperatorsApp() {
-  // exampleMyMergeAll();
+  exampleMyMergeAll();
   // exampleMyConcatAll();
   // exampleMySwitchAll();
   // exampleMyExhaustAll();
