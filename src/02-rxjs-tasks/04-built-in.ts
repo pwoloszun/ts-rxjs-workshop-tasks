@@ -133,6 +133,13 @@ function task3() {
 // wez (first) pierwszy taki slice, w ktorym pierwszy element slice'a > 30
 // wyniki zaloguj na konsoli
 function task4() {
+  interval(100).pipe(
+    map((i) => i + 10),
+    take(110),
+    bufferCount(25),
+    takeWhile((slice) => slice[0] < 70),
+    first((slice) => slice[0] > 30)
+  ).subscribe(fullObserver('task4'));
 }
 
 
