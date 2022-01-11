@@ -23,6 +23,35 @@ import {
 } from 'rxjs/operators';
 
 import { fullObserver } from './utils';
+import { myInterval } from './01-my-observables';
+
+
+// myBufferCount(
+//   myMap$(
+//     myFilter$(
+//       myInterval(500),
+//       (n) => n % 2 === 0
+//     ),
+//     (i) => i * 10
+//   ),
+//   25
+// )
+
+// interval(500).pipe(
+//   filter((n) => n % 2 === 0),
+//   map((i) => i * 10),
+//   bufferCount(25)
+// );
+
+
+
+
+
+
+
+
+
+
 
 // TODO example 1:
 // wez tablice imion ->
@@ -33,11 +62,13 @@ import { fullObserver } from './utils';
 function example1() {
   const names = ['bob', 'ed', 'kate', 'ADMIN', 'boby'];
   // TODO
+
   from(names).pipe(
     takeWhile((name) => name !== 'ADMIN'),
     map((name) => `Hello ${name}`),
     delay(1200)
-  ).subscribe(fullObserver('example1'));
+  ).subscribe(fullObserver('exmaple1'));
+
 }
 
 // TODO example 3:
@@ -66,8 +97,8 @@ function task1() {
 // stworz interwal co 0.8s ->
 // pomin pierwsza wygenerowana liczbe
 // z pozostalych, wez tylko 10 pierwszych wynikow ->
-// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb ->
-// kazdy posredni wynik zaloguj na konsoli ("side effect")->
+// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb -> SCAN
+// kazdy posredni wynik zaloguj na konsoli ("side effect")-> TAP
 // wez tylko ostatni obliczony wynik ->
 // ostatni iloczyn zaloguj na konsoli
 function task2() {
