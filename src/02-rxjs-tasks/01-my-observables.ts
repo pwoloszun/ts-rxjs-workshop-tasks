@@ -42,6 +42,26 @@ function timeoutTask() {
   });
 }
 
+// TODO task: myInterval$
+export function myInterval$(delayInMs: number): Observable<number> {
+  return NEVER; // TODO
+}
+
+function intervalTask() {
+  const interval$ = myInterval$(1000)
+  interval$.subscribe({
+    next(value) {
+      console.log('NEXT intervalTask', value);
+    },
+    error(err) {
+      console.log('ERROR intervalTask', err);
+    },
+    complete() {
+      console.log('COMPLETE intervalTask');
+    },
+  });
+}
+
 // TODO task: myFullObserver(tag)
 function myFullObserver(tag: string): Observer<any> {
   return null as any as Observer<any>;
@@ -53,9 +73,19 @@ export function myFromArray$(items: any[]): Observable<any> {
 }
 
 function fromArrayTask() {
-  const names = ['bob', 'ed', 'kate'];
-  myFromArray$(names)
-    .subscribe(myFullObserver('fromArrayTask'));
+  const names$ = myFromArray$(['bob', 'ed', 'kate'])
+
+  names$.subscribe({
+    next(value) {
+      console.log('NEXT fromArrayTask', value);
+    },
+    error(err) {
+      console.log('ERROR fromArrayTask', err);
+    },
+    complete() {
+      console.log('COMPLETE fromArrayTask');
+    },
+  });
 }
 
 // TODO task: myRange$
@@ -64,18 +94,18 @@ export function myRange$(startValue: number, count: number): Observable<number> 
 }
 
 function rangeTask() {
-  myRange$(5, 7)
-    .subscribe(myFullObserver('rangeTask'));
-}
-
-// TODO task: myInterval$
-export function myInterval$(delayInMs: number): Observable<number> {
-  return NEVER; // TODO
-}
-
-function intervalTask() {
-  myInterval$(1000)
-    .subscribe(myFullObserver('intervalTask'));
+  const range$ = myRange$(5, 7)
+  range$.subscribe({
+    next(value) {
+      console.log('NEXT rangeTask', value);
+    },
+    error(err) {
+      console.log('ERROR rangeTask', err);
+    },
+    complete() {
+      console.log('COMPLETE rangeTask');
+    },
+  });
 }
 
 function myFromArrayWithDelay$(items: any[], delayInMs: number): Observable<any> {
@@ -97,14 +127,7 @@ function throwTask() {
     .subscribe(myFullObserver('throwTask'));
 }
 
-
-// TODO task: myThrow$
-
-// more TODO
-
 // TODO task: myOf$
-
-// TODO task: myTimer$
 
 export function myObservablesApp() {
   // example1();
