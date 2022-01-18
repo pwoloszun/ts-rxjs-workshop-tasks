@@ -142,8 +142,16 @@ function myFullObserver(tag: string): Observer<any> {
 }
 
 // TODO task: myFromArray$
-export function myFromArray$(items: any[]): Observable<any> {
-  return NEVER; // TODO
+export function myFromArray$<T>(items: T[]): Observable<T> {
+
+  return new Observable((obs) => {
+    for (let index = 0; index < items.length; index++) {
+      const element = items[index];
+      obs.next(element);
+    }
+    obs.complete();
+  });
+
 }
 
 function fromArrayTask() {
@@ -160,6 +168,13 @@ function fromArrayTask() {
       console.log('COMPLETE fromArrayTask');
     },
   });
+
+
+  // myFromArray$([123, 456, 789]).subscribe({
+  //   next(value) {
+  //     console.log('NEXT fromArrayTask', value);
+  //   }
+  // })
 }
 
 // TODO task: myRange$
@@ -206,8 +221,8 @@ function throwTask() {
 export function myObservablesApp() {
   // example1();
   // timeoutTask();
-  intervalTask();
-  // fromArrayTask();
+  // intervalTask();
+  fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
   // rangeTask();
