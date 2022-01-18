@@ -1,4 +1,4 @@
-import { forkJoin, interval, of, from, timer, NEVER } from 'rxjs';
+import { forkJoin, interval, of, from, timer, NEVER, Observable, fromEvent } from 'rxjs';
 import {
   concatMap,
   delay,
@@ -16,6 +16,45 @@ import {
 import { fullObserver, items$, randomBetween } from './utils';
 
 
+
+
+function httpGetReq$(url: string): Observable<any> {
+  return NEVER;
+}
+
+const buttonEl = {} as HTMLButtonElement;
+
+
+fromEvent(buttonEl, 'click').pipe(
+  map((ev) => {
+    const getUserReq$ = httpGetReq$('/api/user/123');
+    return getUserReq$; // inner$
+  })
+).subscribe({
+  next(inner$) {
+
+    inner$.subscribe({
+      next(data) {
+        console.log('user data:', data);
+      }
+    });
+
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function btnClick$(delay: number, count: number) {
   // TODO
 }
@@ -23,6 +62,20 @@ function btnClick$(delay: number, count: number) {
 function fetchData$(url: string, respnseTime: number) {
   // TODO
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export function hooExamples() {
   // TODO

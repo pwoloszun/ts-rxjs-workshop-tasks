@@ -94,7 +94,12 @@ function example3() {
 // przemapuj na kwadraty tych liczb ->
 // wyniki zaloguj na konsoli
 function task1() {
-
+  range(5, 17).pipe(
+    filter((n) => n % 2 !== 0),
+    skip(3),
+    take(4),
+    map((i) => i ** 2)
+  ).subscribe(fullObserver('task1'));
 }
 
 // TODO task 2:
@@ -106,6 +111,13 @@ function task1() {
 // wez tylko ostatni obliczony wynik ->
 // ostatni iloczyn zaloguj na konsoli
 function task2() {
+  interval(800).pipe(
+    skip(1),
+    take(10),
+    scan((memo, n) => memo * n),
+    tap((result) => console.log('side effect:', result)),
+    takeLast(1)
+  ).subscribe(fullObserver('task2'));
 }
 
 // TODO task 3:

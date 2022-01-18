@@ -51,6 +51,7 @@ export class AppRunner {
 
     // mySubscriptionsApp();
     // myOperatorsApp();
-    builtInApp();
+    // builtInApp();
+    myHooOperatorsApp();
   }
 }
