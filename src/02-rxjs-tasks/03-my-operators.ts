@@ -1,4 +1,5 @@
 import { Observable, NEVER } from 'rxjs';
+import { bufferCount } from 'rxjs/operators';
 
 import { myFromArray$, myInterval$, myRange$ } from './01-my-observables';
 import { fullObserver } from './utils';
@@ -223,14 +224,41 @@ function taskReduce() {
 }
 
 // TODO myBufferCount$
-function myBufferCount$(source$: Observable<any>, bufferSize: number) {
-  return NEVER;
+function myBufferCount$<T>(source$: Observable<T>, bufferSize: number): Obervable<T[]> {
+
+  return new Observable((obs) => {
+    let buffer: T[] = [];
+
+    source$.subscribe({
+      next(value) {
+        buffer.push(value);
+        if (buffer.length >= bufferSize) {
+          obs.next(buffer);
+          buffer = [];
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        if (buffer.length > 0) {
+          obs.next(buffer);
+        }
+        obs.complete();
+      },
+    });
+
+  });
+
 }
 
 function taskBufferCount() {
   const values$ = myRange$(0, 67);
   myBufferCount$(values$, 25)
     .subscribe(fullObserver('taskBufferCount'));
+  // [0..24]
+  // [25..49]
+  // [50, 66]
 }
 
 function myStartsWith$(source$: Observable<any>, startValue: any) {
@@ -259,14 +287,14 @@ function taskWithLatestFrom() {
 }
 
 export function myOperatorsApp() {
-  taskTake();
+  // taskTake();
   // taskSkip();
   // taskMap();
   // taskFilter();
   // taskTakeWhile();
   // taskFirst();
   // taskReduce();
-  // taskBufferCount();
+  taskBufferCount();
   // taskStartsWith();
   // taskWithLatestFrom();
 }
