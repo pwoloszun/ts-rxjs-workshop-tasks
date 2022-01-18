@@ -73,6 +73,8 @@ function exampleMyConcatAll() {
 
   myConcatAll$(higherOrderStream$)
     .subscribe(fullObserver('exampleMyConcatAll'));
+
+  // A-0..A-4 B-0..B-2
 }
 
 // TODO: mySwitchAll$
