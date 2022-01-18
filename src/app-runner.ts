@@ -49,6 +49,7 @@ export class AppRunner {
   run() {
     // myObservablesApp();
 
-    mySubscriptionsApp();
+    // mySubscriptionsApp();
+    myOperatorsApp();
   }
 }

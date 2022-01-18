@@ -108,7 +108,7 @@ export function myInterval$(delayInMs: number): Observable<number> {
     let i = 0; // hot stream
 
     const intervalId = setInterval(() => {
-      console.log('INTERVAL:',);
+      // console.log('INTERVAL:',);
       obs.next(i);
       i += 1;
     }, delayInMs);
