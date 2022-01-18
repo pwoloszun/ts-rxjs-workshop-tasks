@@ -21,8 +21,43 @@ import {
   startWith,
   withLatestFrom,
 } from 'rxjs/operators';
+import { myInterval$ } from './01-my-observables';
 
 import { fullObserver } from './utils';
+
+
+// myBufferCount(
+//   myFilter$(
+//     myMap$(
+//       myInterval$(1000),
+//       (n) => n ** 2
+//     ),
+//     (i) => i % 2 === 0
+//   ),
+//   25
+// )
+
+// interval(1000).pipe(
+//   map((n) => n ** 2),
+//   filter((i) => i % 2 === 0),
+//   bufferCount(25)
+// );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // TODO example 1:
 // wez tablice imion ->
@@ -31,13 +66,12 @@ import { fullObserver } from './utils';
 // opoznij o 1.2s ->
 // wyniki zaloguj na konsoli
 function example1() {
-  const names = ['bob', 'ed', 'kate', 'ADMIN', 'boby'];
-  // TODO
-  from(names).pipe(
+  from(['bob', 'ed', 'kate', 'ADMIN', 'boby']).pipe(
     takeWhile((name) => name !== 'ADMIN'),
     map((name) => `Hello ${name}`),
     delay(1200)
   ).subscribe(fullObserver('example1'));
+
 }
 
 // TODO example 3:
@@ -60,14 +94,15 @@ function example3() {
 // przemapuj na kwadraty tych liczb ->
 // wyniki zaloguj na konsoli
 function task1() {
+
 }
 
 // TODO task 2:
 // stworz interwal co 0.8s ->
 // pomin pierwsza wygenerowana liczbe
 // z pozostalych, wez tylko 10 pierwszych wynikow ->
-// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb ->
-// kazdy posredni wynik zaloguj na konsoli ("side effect")->
+// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb -> SCAN
+// kazdy posredni wynik zaloguj na konsoli ("side effect")-> TAP
 // wez tylko ostatni obliczony wynik ->
 // ostatni iloczyn zaloguj na konsoli
 function task2() {
