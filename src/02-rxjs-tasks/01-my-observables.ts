@@ -6,6 +6,9 @@ export function myCustom$(name: string): Observable<string> {
     obs.next('a qq!');
     obs.next('a qq! 3');
     obs.complete();
+
+    obs.complete();
+    obs.error(new Error());
   });
 
 }
@@ -138,7 +141,17 @@ function intervalTask() {
 
 // TODO task: myFullObserver(tag)
 function myFullObserver(tag: string): Observer<any> {
-  return null as any as Observer<any>;
+  return {
+    next(value) {
+      console.log(`NEXT ${tag}`, value);
+    },
+    error(err) {
+      console.log(`ERROR ${tag}`, err);
+    },
+    complete() {
+      console.log(`COMPLETE ${tag}`);
+    },
+  };
 }
 
 // TODO task: myFromArray$
@@ -170,6 +183,9 @@ function fromArrayTask() {
   });
 
 
+  names$.subscribe(myFullObserver('fromArrayTask'));
+
+
   // myFromArray$([123, 456, 789]).subscribe({
   //   next(value) {
   //     console.log('NEXT fromArrayTask', value);
@@ -179,7 +195,15 @@ function fromArrayTask() {
 
 // TODO task: myRange$
 export function myRange$(startValue: number, count: number): Observable<number> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    for (let index = 0; index < count; index++) {
+      const value = startValue + index;
+      obs.next(value);
+    }
+    obs.complete();
+  });
+
 }
 
 function rangeTask() {
@@ -208,7 +232,11 @@ function fromArrayWithDelayTask() {
 }
 
 function myThrow$(error: Error) {
-  return NEVER;
+
+  return new Observable((obs) => {
+    obs.error(error);
+  });
+
 }
 
 function throwTask() {
@@ -222,8 +250,8 @@ export function myObservablesApp() {
   // example1();
   // timeoutTask();
   // intervalTask();
-  fromArrayTask();
+  // fromArrayTask();
   // fromArrayWithDelayTask();
-  // throwTask();
-  // rangeTask();
+  throwTask();
+  rangeTask();
 }
