@@ -224,7 +224,7 @@ function taskReduce() {
 }
 
 // TODO myBufferCount$
-function myBufferCount$<T>(source$: Observable<T>, bufferSize: number): Obervable<T[]> {
+function myBufferCount$<T>(source$: Observable<T>, bufferSize: number): Observable<T[]> {
 
   return new Observable((obs) => {
     let buffer: T[] = [];

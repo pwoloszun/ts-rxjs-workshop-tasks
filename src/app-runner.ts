@@ -50,6 +50,7 @@ export class AppRunner {
     // myObservablesApp();
 
     // mySubscriptionsApp();
-    myOperatorsApp();
+    // myOperatorsApp();
+    builtInApp();
   }
 }
