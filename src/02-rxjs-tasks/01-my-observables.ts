@@ -87,13 +87,29 @@ function timeoutTask() {
   });
 }
 
+
+
+
+
+
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    let i = 0; // hot stream
+
+    setInterval(() => {
+      obs.next(i);
+      i += 1;
+    }, delayInMs);
+
+  });
+
 }
 
 function intervalTask() {
   const interval$ = myInterval$(1000)
+
   interval$.subscribe({
     next(value) {
       console.log('NEXT intervalTask', value);
@@ -103,6 +119,19 @@ function intervalTask() {
     },
     complete() {
       console.log('COMPLETE intervalTask');
+    },
+  });
+
+
+  interval$.subscribe({
+    next(value) {
+      console.log('NEXT 22 intervalTask', value);
+    },
+    error(err) {
+      console.log('ERROR 22 intervalTask', err);
+    },
+    complete() {
+      console.log('COMPLETE 22 intervalTask');
     },
   });
 }
@@ -176,8 +205,8 @@ function throwTask() {
 
 export function myObservablesApp() {
   // example1();
-  timeoutTask();
-  // intervalTask();
+  // timeoutTask();
+  intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
