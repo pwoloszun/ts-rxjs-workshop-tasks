@@ -3,6 +3,9 @@ import { Observable, NEVER } from 'rxjs';
 import { myFromArray$, myInterval$, myRange$ } from './01-my-observables';
 import { fullObserver } from './utils';
 
+
+
+
 export function myTake$(source$: Observable<any>, count: number) {
 
   return new Observable(function (obs) {
@@ -32,13 +35,23 @@ export function myTake$(source$: Observable<any>, count: number) {
 
 }
 
+
+
+
+
+
+
+
+
+
+
 function taskTake() {
-  const interval$ = myInterval$(500);
+  const interval$ = myInterval$(1500);
   const firstFour$ = myTake$(interval$, 4);
   firstFour$.subscribe(fullObserver('taskTake'));
 
 
-  const names$ = myFromArray$(['bob', 'ed']);
+  // const names$ = myFromArray$(['bob', 'ed']);
 
   // myTake$(names$, 4)
   //   .subscribe(fullObserver('take names'));
@@ -56,7 +69,28 @@ function taskTake() {
 
 // TODO task: mySkip$
 function mySkip$(source$: Observable<any>, count: number): Observable<any> {
-  return NEVER;
+
+  return new Observable((obs) => {
+    let i = 0;
+
+    source$.subscribe({
+      next(value) {
+        if (i > count) {
+          obs.next(value);
+        } else {
+          i += 1;
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+
+  });
+
 }
 
 function taskSkip() {
@@ -67,7 +101,23 @@ function taskSkip() {
 
 // TODO task: myMap$
 function myMap$(source$: Observable<any>, mappingFn: Function): Observable<any> {
-  return NEVER;
+
+  return new Observable((obs) => {
+    source$.subscribe({
+      next(value) {
+        const mappedValue = mappingFn(value);
+        obs.next(mappedValue);
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+
+  });
+
 }
 
 function taskMap() {
