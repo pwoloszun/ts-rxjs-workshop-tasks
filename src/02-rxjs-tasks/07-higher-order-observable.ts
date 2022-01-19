@@ -1,5 +1,6 @@
 import { forkJoin, interval, of, from, timer, NEVER, Observable, fromEvent } from 'rxjs';
 import {
+  concatAll,
   concatMap,
   delay,
   exhaustMap,
@@ -26,21 +27,16 @@ const buttonEl = {} as HTMLButtonElement;
 
 
 fromEvent(buttonEl, 'click').pipe(
-  map((ev) => {
+  // map((ev) => {
+  //   const getUserReq$ = httpGetReq$('/api/user/123');
+  //   return getUserReq$; // inner$
+  // }),
+  // mergeAll()
+  mergeMap((ev) => {
     const getUserReq$ = httpGetReq$('/api/user/123');
     return getUserReq$; // inner$
   })
-).subscribe({
-  next(inner$) {
-
-    inner$.subscribe({
-      next(data) {
-        console.log('user data:', data);
-      }
-    });
-
-  }
-});
+).subscribe(fullObserver('costam'));
 
 
 

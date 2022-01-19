@@ -52,6 +52,7 @@ export class AppRunner {
     // mySubscriptionsApp();
     // myOperatorsApp();
     // builtInApp();
-    myHooOperatorsApp();
+    // myHooOperatorsApp();
+    catchRetryTaskApp();
   }
 }

@@ -1,4 +1,4 @@
-import { of, concat, range, throwError, timer, interval } from "rxjs";
+import { of, concat, range, throwError, timer, interval, EMPTY, NEVER, Observable } from "rxjs";
 import { catchError, delay, finalize, map, retry, take, tap } from "rxjs/operators";
 
 import { fullObserver } from "./utils";
@@ -15,7 +15,7 @@ function throwExample() {
 
 function fakeApiCall$() {
   let callsCount = 0;
-  return timer(2200).pipe(
+  return timer(1200).pipe(
     tap(() => console.log('Getting API...', callsCount)),
     map((v) => {
       callsCount++;
@@ -29,9 +29,16 @@ function fakeApiCall$() {
 }
 
 function catchExample() {
-  fakeApiCall$().pipe(
-    // catchError((error) => of(error)),
-    // retry(),
+  const apiReq$ = fakeApiCall$();
+  apiReq$.pipe(
+    retry(2),
+    catchError((err) => {
+      // handle err
+      // ...
+      console.log('handle errr:', err);
+      return NEVER;
+    }),
+
     tap((v) => console.log('my catch LOG', v))
   ).subscribe(fullObserver('catchExample'));
 }
@@ -47,6 +54,15 @@ function finalizeExample() {
 
 export function catchRetryTaskApp() {
   // throwExample();
-  // catchExample();
+  catchExample();
   // finalizeExample();
 }
+
+
+const MY_NEVER = new Observable((obs) => {
+
+});
+
+const MY_EMPTY = new Observable((obs) => {
+  obs.complete();
+});
