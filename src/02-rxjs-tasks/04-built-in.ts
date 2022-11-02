@@ -1,5 +1,5 @@
 // Observable creators
-import { interval, from, range } from 'rxjs';
+import { interval, from, range, timer } from 'rxjs';
 
 // operators
 import {
@@ -24,6 +24,20 @@ import {
 
 import { fullObserver } from './utils';
 
+
+// const result$ = interval().pipe(
+//   map((i) => i * 10),
+//   filter((i) => i % 2 === 0),
+//   skip(5)
+// );
+
+// result$.subscribe((v) => { });
+
+
+
+
+
+
 // TODO example 1:
 // wez tablice imion ->
 // bierz imiona dopoki !== 'ADMIN' ->
@@ -34,6 +48,10 @@ function example1() {
   const names = ['bob', 'ed', 'kate', 'ADMIN', 'boby'];
   // TODO
   from(names).pipe(
+    tap((name) => {
+      // side effect
+      return 123;
+    }),
     takeWhile((name) => name !== 'ADMIN'),
     map((name) => `Hello ${name}`),
     delay(1200)
@@ -49,6 +67,13 @@ function example1() {
 function example3() {
   const names = ['bob', 'ed', 'kate', 'ADMIN', 'boby'];
   // TODO
+  interval(120).pipe(
+    tap(() => console.log('qqqq:',)),
+    take(names.length),
+    map((i) => names[i]),
+    takeWhile((name) => name !== 'ADMIN'),
+    map((name) => `Hello ${name}`),
+  ).subscribe(fullObserver('exmlp3'))
 }
 
 
@@ -60,17 +85,30 @@ function example3() {
 // przemapuj na kwadraty tych liczb ->
 // wyniki zaloguj na konsoli
 function task1() {
+  range(5, 21 - 5).pipe(
+    filter((i) => i % 2 !== 0),
+    skip(3),
+    take(4),
+    map((n) => n ** 2)
+  ).subscribe(fullObserver('task1'));
 }
 
 // TODO task 2:
 // stworz interwal co 0.8s ->
 // pomin pierwsza wygenerowana liczbe
 // z pozostalych, wez tylko 10 pierwszych wynikow ->
-// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb ->
-// kazdy posredni wynik zaloguj na konsoli ("side effect")->
+// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb -> SCAN
+// kazdy posredni wynik zaloguj na konsoli ("side effect")-> TAP
 // wez tylko ostatni obliczony wynik ->
 // ostatni iloczyn zaloguj na konsoli
 function task2() {
+  interval(800).pipe(
+    skip(1),
+    take(10),
+    scan((memo, n) => memo * n),
+    tap((i) => console.log('SIDE EFFECT:', i)),
+    takeLast(1)
+  ).subscribe(fullObserver('task2'));
 }
 
 // TODO task 3:
@@ -122,7 +160,7 @@ function task6() {
 export function builtInApp() {
   // example1();
   // example2();
-  // example3();
+  example3();
   // task1();
   // task2();
   // task3();

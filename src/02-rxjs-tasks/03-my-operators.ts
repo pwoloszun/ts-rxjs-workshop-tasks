@@ -1,4 +1,4 @@
-import { Observable, NEVER, withLatestFrom } from 'rxjs';
+import { Observable, NEVER, withLatestFrom, EMPTY } from 'rxjs';
 
 import { myFromArray$, myInterval$, myRange$ } from './01-my-observables';
 import { fullObserver } from './utils';
@@ -256,8 +256,36 @@ function taskStartsWith() {
     .subscribe(fullObserver('taskStartsWith'));
 }
 
-function myWithLatestFrom$(source$: Observable<any>, other$: Observable<any>): Observable<any> {
-  return NEVER;
+function myWithLatestFrom$<T, K>(source$: Observable<T>, other$: Observable<K>): Observable<[T, K]> {
+
+  return new Observable((obs) => {
+    let otherValue: K;
+    let hasOtherEmitted = false;
+
+    const srcSub = source$.subscribe({
+      next(value) {
+        if (hasOtherEmitted) {
+          obs.next([value, otherValue]);
+        }
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+
+    const otherSub = other$.subscribe({
+      next(value) {
+        hasOtherEmitted = true;
+        otherValue = value
+      },
+    });
+
+    return () => {
+      srcSub.unsubscribe();
+      otherSub.unsubscribe();
+    }
+  });
+
 }
 
 function taskWithLatestFrom() {
@@ -272,16 +300,14 @@ function taskWithLatestFrom() {
   // [3, 14]
   // ,,,
 
-  myWithLatestFrom$(quick$, slow$)
-    .subscribe(fullObserver('Leader: quick [2nd exmpl]'));
+  // myWithLatestFrom$(quick$, slow$)
+  //   .subscribe(fullObserver('Leader: quick [2nd exmpl]'));
   // [3, 0]
   // [4, 0]
   // [5, 0]
   // [6, 0]
   // [7, 1]
   // ...
-
-
 }
 
 export function myOperatorsApp() {
@@ -296,3 +322,26 @@ export function myOperatorsApp() {
   // taskStartsWith();
   taskWithLatestFrom();
 }
+
+
+`======== 16:22 ==========`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
