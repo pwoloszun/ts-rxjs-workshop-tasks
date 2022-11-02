@@ -1,16 +1,16 @@
 import { Observable, Observer, NEVER } from 'rxjs';
 
-export function myCustom$(name: string): Observable<string> {
+export function myCustom$(name: string): Observable<number> {
 
   return new Observable((obs) => {
-    obs.next('TVP 1');
+    obs.next(1);
 
     setTimeout(() => {
-      obs.next('qq 2');
-      obs.next('qq 3');
+      obs.next(22);
+      obs.next(333);
     }, 2000);
 
-    obs.next('TVP 4');
+    obs.next(4444);
   });
 
 }
@@ -46,7 +46,9 @@ function example1() {
 
 
 //======
-
+// API
+// setTimeout(() => {
+// }, 3000);
 
 // TODO myTimeout$()
 export function myTimeout$(delayInMs: number): Observable<void> {
@@ -157,7 +159,8 @@ function throwTask() {
 // TODO task: myOf$
 
 export function myObservablesApp() {
-  example1();
+  // example1();
+  timeoutTask();
   // timeoutTask();
   // intervalTask();
   // fromArrayTask();
