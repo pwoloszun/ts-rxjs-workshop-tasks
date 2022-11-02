@@ -90,10 +90,10 @@ setInterval(() => {
 
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
-  let i = 0;
+
 
   return new Observable((obs) => {
-
+    let i = 0;
     setInterval(() => {
       obs.next(i);
       i += 1;
@@ -114,6 +114,12 @@ function intervalTask() {
     },
     complete() {
       console.log('COMPLETE intervalTask');
+    },
+  });
+
+  interval$.subscribe({
+    next(value) {
+      console.log('NEXT 222 intervalTask', value);
     },
   });
 }
