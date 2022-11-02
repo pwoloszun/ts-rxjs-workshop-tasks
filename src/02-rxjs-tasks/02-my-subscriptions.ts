@@ -2,7 +2,8 @@ import { fullObserver } from "./utils";
 import { myInterval$, myTimeout$ } from './01-my-observables';
 
 function example1() {
-  const timeout$ = myTimeout$(5500);
+  console.log('example1 START:',);
+  const timeout$ = myTimeout$(3500);
   const subscription = timeout$.subscribe(fullObserver('unsubscribe timeout'));
 
   setTimeout(() => {
@@ -16,6 +17,6 @@ function task1() {
 }
 
 export function mySubscriptionsApp() {
-  // example1();
+  example1();
   // task1();
 }
