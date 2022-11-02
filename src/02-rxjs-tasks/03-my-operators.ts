@@ -185,6 +185,8 @@ function taskReduce() {
     -5
   );
   mltpResult$.subscribe(fullObserver('taskReduce'));
+  // -600
+  // complete
 }
 
 // TODO myBufferCount$
@@ -196,6 +198,10 @@ function taskBufferCount() {
   const values$ = myRange$(0, 67);
   myBufferCount$(values$, 25)
     .subscribe(fullObserver('taskBufferCount'));
+  // [0..24]
+  // [25..49]
+  // [50, 66]
+  // complete
 }
 
 function myStartsWith$(source$: Observable<any>, startValue: any) {
