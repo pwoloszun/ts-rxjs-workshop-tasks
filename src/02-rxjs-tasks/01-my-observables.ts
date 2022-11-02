@@ -90,8 +90,6 @@ setInterval(() => {
 
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
-
-
   return new Observable((obs) => {
     let i = 0;
     setInterval(() => {
@@ -100,7 +98,6 @@ export function myInterval$(delayInMs: number): Observable<number> {
     }, delayInMs);
 
   });
-
 }
 
 function intervalTask() {
@@ -130,12 +127,13 @@ function myFullObserver(tag: string): Observer<any> {
 }
 
 // TODO task: myFromArray$
-export function myFromArray$(items: any[]): Observable<any> {
+export function myFromArray$(items: T[]): Observable<T> {
   return NEVER; // TODO
 }
 
 function fromArrayTask() {
-  const names$ = myFromArray$(['bob', 'ed', 'kate'])
+  const names$ = myFromArray$(['bob', 'ed', 'kate']);
+  const myNumbers$ = myFromArray$([11, 22, 333]);
 
   names$.subscribe({
     next(value) {
@@ -148,6 +146,8 @@ function fromArrayTask() {
       console.log('COMPLETE fromArrayTask');
     },
   });
+
+  names$.subscribe(myFullObserver('fromArrayTask'));
 }
 
 // TODO task: myRange$
@@ -195,8 +195,8 @@ export function myObservablesApp() {
   // example1();
   // timeoutTask();
   // timeoutTask();
-  intervalTask();
-  // fromArrayTask();
+  // intervalTask();
+  fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
   // rangeTask();
