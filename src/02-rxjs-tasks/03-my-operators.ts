@@ -1,4 +1,4 @@
-import { Observable, NEVER } from 'rxjs';
+import { Observable, NEVER, withLatestFrom } from 'rxjs';
 
 import { myFromArray$, myInterval$, myRange$ } from './01-my-observables';
 import { fullObserver } from './utils';
@@ -176,6 +176,7 @@ function taskFirst() {
 function myReduce$(source$: Observable<any>, accumulatorFn: Function, startValue: any): Observable<any> {
   return new Observable((obs) => {
     let memo = startValue;
+
     const srcSub = source$.subscribe({
       next(value) {
         memo = accumulatorFn(memo, value);
@@ -207,7 +208,32 @@ function taskReduce() {
 
 // TODO myBufferCount$
 function myBufferCount$(source$: Observable<any>, bufferSize: number) {
-  return NEVER;
+
+  return new Observable((obs) => {
+    let buffer: any[] = [];
+
+    const srcSub = source$.subscribe({
+      next(value) {
+        buffer.push(value);
+        if (buffer.length >= bufferSize) {
+          obs.next(buffer);
+          buffer = [];
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        if (buffer.length > 0) {
+          obs.next(buffer);
+        }
+        obs.complete();
+      },
+    });
+
+    return () => srcSub.unsubscribe();
+  });
+
 }
 
 function taskBufferCount() {
@@ -235,14 +261,27 @@ function myWithLatestFrom$(source$: Observable<any>, other$: Observable<any>): O
 }
 
 function taskWithLatestFrom() {
-  const slow$ = myInterval$(800);
-  const quick$ = myInterval$(4200);
-
-  // myWithLatestFrom$(quick$, slow$)
-  //   .subscribe(fullObserver('taskWithLatestFrom: quick, slow'));
+  const slow$ = myInterval$(3000);
+  const quick$ = myInterval$(800);
 
   myWithLatestFrom$(slow$, quick$)
-    .subscribe(fullObserver('taskWithLatestFrom: slow, quick 2'));
+    .subscribe(fullObserver('Leader: slow [1st exmpl]'));
+  // [0, 2]
+  // [1, 6]
+  // [2, 10]
+  // [3, 14]
+  // ,,,
+
+  myWithLatestFrom$(quick$, slow$)
+    .subscribe(fullObserver('Leader: quick [2nd exmpl]'));
+  // [3, 0]
+  // [4, 0]
+  // [5, 0]
+  // [6, 0]
+  // [7, 1]
+  // ...
+
+
 }
 
 export function myOperatorsApp() {
@@ -252,8 +291,8 @@ export function myOperatorsApp() {
   // taskFilter();
   // taskTakeWhile();
   // taskFirst();
-  taskReduce();
+  // taskReduce();
   // taskBufferCount();
   // taskStartsWith();
-  // taskWithLatestFrom();
+  taskWithLatestFrom();
 }
