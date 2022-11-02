@@ -170,7 +170,14 @@ function fromArrayTask() {
 
 // TODO task: myRange$
 export function myRange$(startValue: number, count: number): Observable<number> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    for (let index = startValue; index < startValue + count; index++) {
+      obs.next(index);
+    }
+    obs.complete();
+  });
+
 }
 
 function rangeTask() {
@@ -199,6 +206,7 @@ function fromArrayWithDelayTask() {
 }
 
 function myThrow$(error: Error) {
+  // throw error;
   return NEVER;
 }
 
@@ -214,8 +222,8 @@ export function myObservablesApp() {
   // timeoutTask();
   // timeoutTask();
   // intervalTask();
-  fromArrayTask();
+  // fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
-  // rangeTask();
+  rangeTask();
 }
