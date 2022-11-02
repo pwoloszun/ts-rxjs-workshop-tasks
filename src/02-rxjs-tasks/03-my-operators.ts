@@ -55,6 +55,10 @@ function taskSkip() {
   const interval$ = myInterval$(500);
   const withoutFirstSeven$ = mySkip$(interval$, 7);
   withoutFirstSeven$.subscribe(fullObserver('taskSkip'));
+
+  const arr$ = myFromArray$(['a', 'b', 'c', 'd']);
+  const arrSkip$ = mySkip$(arr$, 3);
+  arrSkip$.subscribe(fullObserver('ARR skip'));
 }
 
 // TODO task: myMap$
@@ -165,8 +169,8 @@ function taskWithLatestFrom() {
 }
 
 export function myOperatorsApp() {
-  taskTake();
-  // taskSkip();
+  // taskTake();
+  taskSkip();
   // taskMap();
   // taskFilter();
   // taskTakeWhile();
