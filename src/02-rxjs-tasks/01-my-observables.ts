@@ -206,13 +206,15 @@ function fromArrayWithDelayTask() {
 }
 
 function myThrow$(error: Error) {
-  // throw error;
-  return NEVER;
+  return new Observable((obs) => {
+    obs.error(error);
+  });
 }
 
 function throwTask() {
-  myThrow$(new Error('Jakis blad!'))
-    .subscribe(myFullObserver('throwTask'));
+  const throw$ = myThrow$(new Error('Jakis blad!'));
+
+  throw$.subscribe(myFullObserver('throwTask'));
 }
 
 // TODO task: myOf$
@@ -224,6 +226,6 @@ export function myObservablesApp() {
   // intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
-  // throwTask();
-  rangeTask();
+  throwTask();
+  // rangeTask();
 }
