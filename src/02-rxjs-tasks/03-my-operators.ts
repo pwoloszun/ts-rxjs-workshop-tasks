@@ -174,7 +174,23 @@ function taskFirst() {
 
 // TODO task: myReduce$
 function myReduce$(source$: Observable<any>, accumulatorFn: Function, startValue: any): Observable<any> {
-  return NEVER;
+  return new Observable((obs) => {
+    let memo = startValue;
+    const srcSub = source$.subscribe({
+      next(value) {
+        memo = accumulatorFn(memo, value);
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.next(memo);
+        obs.complete();
+      },
+    });
+
+    return () => srcSub.unsubscribe();
+  });
 }
 
 function taskReduce() {
@@ -210,7 +226,7 @@ function myStartsWith$(source$: Observable<any>, startValue: any) {
 
 function taskStartsWith() {
   const values$ = myRange$(0, 10);
-  myStartsWith$(values$, -100)
+  myStartsWith$(values$, 'GGG')
     .subscribe(fullObserver('taskStartsWith'));
 }
 
@@ -231,12 +247,12 @@ function taskWithLatestFrom() {
 
 export function myOperatorsApp() {
   // taskTake();
-  taskSkip();
+  // taskSkip();
   // taskMap();
   // taskFilter();
   // taskTakeWhile();
   // taskFirst();
-  // taskReduce();
+  taskReduce();
   // taskBufferCount();
   // taskStartsWith();
   // taskWithLatestFrom();
