@@ -10,7 +10,12 @@ export function myCustom$(name: string): Observable<number> {
       obs.next(333);
     }, 2000);
 
+    // obs.error(new Error(`sdadsa`));
+
+    // throw new Error(`sdadsa`);
+
     obs.next(4444);
+    obs.complete();
   });
 
 }
@@ -52,11 +57,18 @@ function example1() {
 
 // TODO myTimeout$()
 export function myTimeout$(delayInMs: number): Observable<void> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    setTimeout(() => {
+      obs.next();
+      obs.complete();
+    }, delayInMs);
+  });
+
 }
 
 function timeoutTask() {
-  const timeout$ = myTimeout$(2000); // nothing happens
+  const timeout$ = myTimeout$(4000); // nothing happens
   timeout$.subscribe({
     next(value) {
       console.log('NEXT timeoutTask', value);
