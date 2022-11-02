@@ -69,6 +69,7 @@ export function myTimeout$(delayInMs: number): Observable<void> {
       // cleanup
       // console.log('CLEANUP:',);
       clearTimeout(timeoutId);
+      // clearInterval
     };
   });
 
@@ -95,17 +96,27 @@ setInterval(() => {
 
 }, 2000);
 
+
+
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
+
   return new Observable((obs) => {
     let i = 0;
-    setInterval(() => {
+    const intervalId = setInterval(() => {
+      console.log('LEAK:',);
       obs.next(i);
       i += 1;
     }, delayInMs);
 
+    return () => {// cleanup
+      clearInterval(intervalId);
+    };
   });
+
 }
+
+
 
 function intervalTask() {
   const interval$ = myInterval$(1000)

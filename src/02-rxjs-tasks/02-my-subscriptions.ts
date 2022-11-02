@@ -13,10 +13,16 @@ function example1() {
 
 // TODO: impl unsubscribe to: myInterval$()
 function task1() {
-  // TODO
+  const interval$ = myInterval$(300);
+  const subscription = interval$
+    .subscribe(fullObserver('unsub Interval'));
+
+  setTimeout(() => {
+    subscription.unsubscribe();
+  }, 2000);
 }
 
 export function mySubscriptionsApp() {
   example1();
-  // task1();
+  task1();
 }
