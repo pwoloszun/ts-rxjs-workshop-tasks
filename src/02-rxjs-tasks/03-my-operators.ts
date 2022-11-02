@@ -1,8 +1,3 @@
-
-
-// `======= 14:49 ======`
-
-
 import { Observable, NEVER } from 'rxjs';
 
 import { myFromArray$, myInterval$, myRange$ } from './01-my-observables';
@@ -87,22 +82,22 @@ function taskSkip() {
 }
 
 // TODO task: myMap$
-function myMap$(source$: Observable<any>, mappingFn: Function): Observable<any> {
+function myMap$<T, K>(source$: Observable<T>, mappingFn: (item: T) => K): Observable<K> {
   return NEVER;
 }
 
 function taskMap() {
   const interval$ = myInterval$(500);
-  const mapped$ = myMap$(interval$, (i: any) => i * 10);
+  const mapped$ = myMap$(interval$, (i) => i * 10);
   mapped$.subscribe(fullObserver('taskMap'));
 
   const names$ = myFromArray$(['bob', 'ed']);
-  const greetings$ = myMap$(names$, (name: any) => `Hello ${name}!`);
+  const greetings$ = myMap$(names$, (name) => `Hello ${name}!`);
   greetings$.subscribe(fullObserver('greetings'));
 }
 
 // TODO task: myFilter$
-function myFilter$(source$: Observable<any>, filteringFn: Function): Observable<any> {
+function myFilter$<T>(source$: Observable<T>, filteringFn: (item: T) => boolean): Observable<T> {
   return NEVER;
 }
 
