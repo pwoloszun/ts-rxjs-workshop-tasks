@@ -83,9 +83,24 @@ function timeoutTask() {
   });
 }
 
+
+setInterval(() => {
+
+}, 2000);
+
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
-  return NEVER; // TODO
+  let i = 0;
+
+  return new Observable((obs) => {
+
+    setInterval(() => {
+      obs.next(i);
+      i += 1;
+    }, delayInMs);
+
+  });
+
 }
 
 function intervalTask() {
@@ -172,9 +187,9 @@ function throwTask() {
 
 export function myObservablesApp() {
   // example1();
-  timeoutTask();
   // timeoutTask();
-  // intervalTask();
+  // timeoutTask();
+  intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
