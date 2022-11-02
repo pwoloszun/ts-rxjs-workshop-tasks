@@ -104,7 +104,7 @@ export function myInterval$(delayInMs: number): Observable<number> {
   return new Observable((obs) => {
     let i = 0;
     const intervalId = setInterval(() => {
-      console.log('LEAK:',);
+      // console.log('LEAK:',);
       obs.next(i);
       i += 1;
     }, delayInMs);
