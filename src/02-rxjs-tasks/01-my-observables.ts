@@ -155,7 +155,7 @@ function myFullObserver<T>(tag: string): Observer<T> {
 }
 
 // TODO task: myFromArray$
-export function myFromArray$(items: T[]): Observable<T> {
+export function myFromArray$<T>(items: T[]): Observable<T> {
 
   return new Observable((obs) => {
     for (let index = 0; index < items.length; index++) {
