@@ -122,8 +122,18 @@ function intervalTask() {
 }
 
 // TODO task: myFullObserver(tag)
-function myFullObserver(tag: string): Observer<any> {
-  return null as any as Observer<any>;
+function myFullObserver<T>(tag: string): Observer<T> {
+  return {
+    next(value) {
+      console.log(`[NEXT] ${tag}`, value);
+    },
+    error(err) {
+      console.log(`[ERROR] ${tag}`, err);
+    },
+    complete() {
+      console.log(`[COMPLETE] ${tag}`);
+    },
+  };
 }
 
 // TODO task: myFromArray$
