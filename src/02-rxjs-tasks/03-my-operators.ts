@@ -48,7 +48,27 @@ function taskTake() {
 
 // TODO task: mySkip$
 function mySkip$(source$: Observable<any>, count: number): Observable<any> {
-  return NEVER;
+  return new Observable((obs) => {
+
+    let i = 0;
+    const srcSub = source$.subscribe({
+      next(value) {
+        if (i >= count) {
+          obs.next(value);
+        } else {
+          i += 1;
+        }
+      },
+      error(err) {
+        obs.error(err);
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+
+    return () => srcSub.unsubscribe();
+  });
 }
 
 function taskSkip() {
