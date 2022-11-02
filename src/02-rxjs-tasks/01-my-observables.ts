@@ -138,7 +138,15 @@ function myFullObserver<T>(tag: string): Observer<T> {
 
 // TODO task: myFromArray$
 export function myFromArray$(items: T[]): Observable<T> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    for (let index = 0; index < items.length; index++) {
+      const element = items[index];
+      obs.next(element);
+    }
+    obs.complete();
+  });
+
 }
 
 function fromArrayTask() {
@@ -166,7 +174,7 @@ export function myRange$(startValue: number, count: number): Observable<number> 
 }
 
 function rangeTask() {
-  const range$ = myRange$(5, 7)
+  const range$ = myRange$(5, 7);
   range$.subscribe({
     next(value) {
       console.log('NEXT rangeTask', value);
