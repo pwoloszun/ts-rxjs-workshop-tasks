@@ -1,4 +1,4 @@
-import { forkJoin, interval, of, from, timer, NEVER } from 'rxjs';
+import { forkJoin, interval, of, from, timer, NEVER, Observable, fromEvent } from 'rxjs';
 import {
   concatMap,
   delay,
@@ -16,17 +16,47 @@ import {
 import { fullObserver, items$, randomBetween } from './utils';
 
 
-function btnClick$(delay: number, count: number) {
-  // TODO
+function initBtnClick$(delayMs: number, count: number): Observable<any> {
+  return interval(delayMs).pipe(
+    take(count)
+  );
 }
 
-function fetchData$(url: string, respnseTime: number) {
-  // TODO
+function fetchData$(url: string, respnseTime: number): Observable<string[]> {
+  return of(['data 1', 'data 2']).pipe(
+    tap(() => console.log('REQ:', url)),
+    delay(respnseTime)
+  );
 }
 
 export function hooExamples() {
-  // TODO
+  const btnClick$ = initBtnClick$(1000, 3);
+
+
+  const usersData$ = btnClick$.pipe(
+    map(() => {
+      const httpReq$ = fetchData$('/users', 2200);
+      return httpReq$;
+    })
+  );
+
+  usersData$.subscribe((inner$) => {
+    inner$.subscribe((usersDtos) => {
+      console.log('user DTOS:', usersDtos);
+    });
+  });
+
+
 }
+
+
+
+
+
+
+
+
+
 
 
 function example1() {
@@ -189,6 +219,7 @@ function task6() {
 }
 
 export function higherOrderObservablesApp() {
+  hooExamples();
   // example1();
   // example2();
   // example3();
