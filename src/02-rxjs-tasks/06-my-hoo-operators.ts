@@ -10,9 +10,6 @@ function letterStream$(letter: string, { delayInMs, count }: { delayInMs: number
   );
 }
 
-
-
-`========= 11:05 ====`
 export function myMergeAll$(sourceHoo$: Observable<Observable<any>>) {
 
   return new Observable((obs) => {
@@ -147,8 +144,41 @@ function exampleMySwitchAll22() {
 
 
 // TODO: myExhaustAll$
-function myExhaustAll$($sourceHoo: Observable<Observable<any>>) {
-  return new Observable(function () {
+function myExhaustAll$(sourceHoo$: Observable<Observable<any>>) {
+  return new Observable((obs) => {
+    let isInnerActive = false;
+    let isHooCompl = false;
+    let innerSub = new Subscription();
+
+    const hooSub = sourceHoo$.subscribe({
+      next(inner$) {
+        if (!isInnerActive) {
+          isInnerActive = true;
+          innerSub = inner$.subscribe({
+            next(value) {
+              obs.next(value);
+            },
+            complete() {
+              isInnerActive = false;
+              if (isHooCompl) {
+                obs.complete();
+              }
+            },
+          });
+        }
+      },
+      complete() {
+        isHooCompl = true;
+        if (!isInnerActive) {
+          obs.complete();
+        }
+      },
+    });
+
+    return () => {
+      hooSub.unsubscribe();
+      innerSub.unsubscribe();
+    };
   });
 }
 
@@ -171,6 +201,6 @@ function exampleMyExhaustAll() {
 export function myHooOperatorsApp() {
   // exampleMyMergeAll();
   // exampleMyConcatAll();
-  exampleMySwitchAll();
-  // exampleMyExhaustAll();
+  // exampleMySwitchAll();
+  exampleMyExhaustAll();
 }
