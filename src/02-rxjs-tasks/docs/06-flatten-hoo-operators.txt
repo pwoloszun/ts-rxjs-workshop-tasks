@@ -16,8 +16,3 @@ subscribes to it, when it's complete, then subscribes to another and so on
 4) exhaustMap() - if there is no pending stream then subscribes to passed stream
 else ignores that stream
 
-===
-5) forkJoin() - waits until all passed streams completes, and returns array of thier last emitted values (like Promise.all())
-
-===
-6) skipUntil(other$) - skips emitted values until passed other$ stream emits something

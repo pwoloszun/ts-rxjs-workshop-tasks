@@ -32,4 +32,23 @@ Use when:
 - if the order of emissions is important
 
 ===
-3) race() - selecting stream that is the first to produce values, others are unsubscribed and completely ignored
+3) race(first$, second$)
+- selecting stream that is the first to produce values, others are unsubscribed and completely ignored
+
+===
+4) forkJoin()
+- waits until all passed streams completes, and returns array of thier last emitted values (like Promise.all())
+
+===
+5a) skipUntil(other$)
+- skips emitted values until passed other$ stream emits something
+
+5b) takeUntil(other$)
+- analogously
+
+===
+6) withLatestFrom(firstOther$, secondOther$otherFirst) op.
+- (aka master + 1-n slave(s)) emits only when leader emits, returns array of last emitted values
+
+7) combineLatest(first$, second$) fact. fn.
+- emits every time any stream emits, all latest changes
