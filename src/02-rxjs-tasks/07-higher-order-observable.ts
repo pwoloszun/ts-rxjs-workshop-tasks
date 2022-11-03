@@ -1,11 +1,14 @@
 import { forkJoin, interval, of, from, timer, NEVER, Observable, fromEvent } from 'rxjs';
 import {
+  concatAll,
   concatMap,
   delay,
+  exhaustAll,
   exhaustMap,
   map,
   mergeAll,
   mergeMap,
+  switchAll,
   switchMap,
   switchMapTo,
   take,
@@ -17,33 +20,53 @@ import { fullObserver, items$, randomBetween } from './utils';
 
 
 function initBtnClick$(delayMs: number, count: number): Observable<any> {
+  let i = 0;
   return interval(delayMs).pipe(
+    tap(() => console.log('btn CLICK', ++i)),
     take(count)
   );
 }
 
+let i = 0;
 function fetchData$(url: string, respnseTime: number): Observable<string[]> {
   return of(['data 1', 'data 2']).pipe(
-    tap(() => console.log('REQ:', url)),
-    delay(respnseTime)
+    tap(() => console.log('REQ:', ++i, url)),
+    delay(respnseTime),
+    tap(() => console.log('RESP:', i, url))
+
   );
 }
 
 export function hooExamples() {
-  const btnClick$ = initBtnClick$(1000, 3);
+  const btnClick$ = initBtnClick$(500, 3);
 
 
   const usersData$ = btnClick$.pipe(
-    map(() => {
-      const httpReq$ = fetchData$('/users', 2200);
-      return httpReq$;
+    // === SAME 1
+    // map(() => {
+    //   const innerHttpReq$ = fetchData$('/users', 2200);
+    //   return innerHttpReq$;
+    // }),
+    // mergeAll(),
+    // === SAME 2
+    mergeMap(() => {
+      const innerHttpReq$ = fetchData$('/users', 2200);
+      return innerHttpReq$;
     })
+
+    // concatAll()
+    // switchAll()
+    // exhaustAll()
   );
 
-  usersData$.subscribe((inner$) => {
-    inner$.subscribe((usersDtos) => {
-      console.log('user DTOS:', usersDtos);
-    });
+  // usersData$.subscribe((inner$) => {
+  //   inner$.subscribe((usersDtos) => {
+  //     console.log('user DTOS:', usersDtos);
+  //   });
+  // });
+
+  usersData$.subscribe((userDtos) => {
+    console.log('[NEXT] user DTOS:', userDtos);
   });
 
 
