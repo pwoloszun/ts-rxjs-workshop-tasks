@@ -25,9 +25,12 @@ import {
 import { fullObserver } from './utils/index';
 
 // Rx custom Operator TEMPLATE
-function myCustomOperator() {
-  return function (source$: Observable<any>) {
-    return source$.pipe(/*...*/);
+function myCustomOperator<T, K>(): OperatorFunction<T, K> {
+  return function (source$) {
+    return source$.pipe(
+      /*...*/
+      map((value: T) => 1234 as K)
+    );
   };
 }
 
