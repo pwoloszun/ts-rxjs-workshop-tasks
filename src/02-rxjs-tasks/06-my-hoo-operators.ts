@@ -10,23 +10,21 @@ function letterStream$(letter: string, { delayInMs, count }: { delayInMs: number
   );
 }
 
-// TODO: myMergeAll$
+
+
+`========= 11:05 ====`
 export function myMergeAll$(sourceHoo$: Observable<Observable<any>>) {
 
   return new Observable((obs) => {
     const innerSubs: Subscription[] = [];
     let isHooCompl = false;
     let innerCount = 0;
-
     const hooSub = sourceHoo$.subscribe({
       next(inner$) {
         innerCount += 1;
         const innerSub = inner$.subscribe({
           next(value) {
             obs.next(value);
-          },
-          error(err) {
-            obs.error(err);
           },
           complete() {
             innerCount -= 1;
@@ -36,9 +34,6 @@ export function myMergeAll$(sourceHoo$: Observable<Observable<any>>) {
           },
         });
         innerSubs.push(innerSub);
-      },
-      error(err) {
-        obs.error(err);
       },
       complete() {
         isHooCompl = true;
@@ -82,8 +77,40 @@ function exampleMyConcatAll() {
 }
 
 // TODO: mySwitchAll$
-function mySwitchAll$($sourceHoo: Observable<Observable<any>>) {
-  return new Observable(function () {
+function mySwitchAll$(sourceHoo$: Observable<Observable<any>>) {
+  return new Observable((obs) => {
+    let isHooCompl = false;
+    let isInnerCompl = false;
+    let innerSub = new Subscription();
+
+    const hooSub = sourceHoo$.subscribe({
+      next(inner$) {
+        innerSub.unsubscribe();
+        isInnerCompl = false;
+        innerSub = inner$.subscribe({
+          next(value) {
+            obs.next(value);
+          },
+          complete() {
+            isInnerCompl = true;
+            if (isHooCompl) {
+              obs.complete();
+            }
+          },
+        });
+      },
+      complete() {
+        isHooCompl = true;
+        if (isInnerCompl) {
+          obs.complete();
+        }
+      },
+    });
+
+    return () => {
+      hooSub.unsubscribe();
+      innerSub.unsubscribe();
+    };
   });
 
 }
@@ -102,6 +129,21 @@ function exampleMySwitchAll() {
     .subscribe(fullObserver('mySwitchAll$'));
   // A-0 A-1 A-2 B-0 C-0 C-1 COMPLETE
 }
+
+function exampleMySwitchAll22() {
+  const a$ = from(['A-0', 'A-1']);
+  const b$ = from(['B-0', 'B-1', 'B-2']);
+  const arr$ = [a$, b$];
+  const higherOrderStream$ = interval(2000).pipe(
+    take(arr$.length),
+    map((i) => arr$[i])
+  );
+
+  mySwitchAll$(higherOrderStream$)
+    .subscribe(fullObserver('mySwitchAll$'));
+  // A-0 A-1 B-0..B-2 COMPLETE
+}
+
 
 
 // TODO: myExhaustAll$
@@ -127,8 +169,8 @@ function exampleMyExhaustAll() {
 
 
 export function myHooOperatorsApp() {
-  exampleMyMergeAll();
+  // exampleMyMergeAll();
   // exampleMyConcatAll();
-  // exampleMySwitchAll();
+  exampleMySwitchAll();
   // exampleMyExhaustAll();
 }
