@@ -85,6 +85,7 @@ function exampleMyConcatAll() {
 function mySwitchAll$($sourceHoo: Observable<Observable<any>>) {
   return new Observable(function () {
   });
+
 }
 
 function exampleMySwitchAll() {
@@ -99,6 +100,7 @@ function exampleMySwitchAll() {
 
   mySwitchAll$(higherOrderStream$)
     .subscribe(fullObserver('mySwitchAll$'));
+  // A-0 A-1 A-2 B-0 C-0 C-1 COMPLETE
 }
 
 
@@ -120,6 +122,7 @@ function exampleMyExhaustAll() {
 
   myExhaustAll$(higherOrderStream$)
     .subscribe(fullObserver('exampleMyExhaustAll'));
+  // A-0..A-4 C-0 C-1
 }
 
 
