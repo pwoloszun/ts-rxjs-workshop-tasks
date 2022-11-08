@@ -58,9 +58,9 @@ function mySkip$(source$: Observable<any>, count: number): Observable<any> {
           i += 1;
         }
       },
-      error(err) {
-        obs.error(err);
-      },
+      // error(err) {
+      //   obs.error(err);
+      // },
       complete() {
         obs.complete();
       },
@@ -98,7 +98,21 @@ function taskSkip() {
 
 // TODO task: myMap$
 function myMap$<T, K>(source$: Observable<T>, mappingFn: (item: T) => K): Observable<K> {
-  return NEVER;
+
+  return new Observable(function (obs) {
+    const srcSub = source$.subscribe({
+      next(value) {
+        const mapped = mappingFn(value);
+        obs.next(mapped);
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+
+    return () => srcSub.unsubscribe();
+  });
+
 }
 
 function taskMap() {
@@ -113,7 +127,22 @@ function taskMap() {
 
 // TODO task: myFilter$
 function myFilter$<T>(source$: Observable<T>, filteringFn: (item: T) => boolean): Observable<T> {
-  return NEVER;
+
+  return new Observable(function (obs) {
+    const srcSub = source$.subscribe({
+      next(value) {
+        if (filteringFn(value)) {
+          obs.next(value);
+        }
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+
+    return () => srcSub.unsubscribe();
+  });
+
 }
 
 function taskFilter() {
