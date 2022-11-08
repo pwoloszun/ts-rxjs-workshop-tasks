@@ -56,6 +56,14 @@ function example1() {
 
 
 //======
+setTimeout(() => {
+  // ...
+}, 2000);
+
+
+// setTimeout(() => {
+//   // ...
+// }, Number.POSITIVE_INFINITY);
 
 
 // TODO myTimeout$()
