@@ -93,15 +93,28 @@ function timeoutTask() {
   });
 }
 
+// 
+
+
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
+  // HOT stream - producer is SHARED across all subscriptions
+  // let i = 0;
 
-  return NEVER; // TODO
+  return new Observable((obs) => {
+    // COLD stream - each subscription has separate, independent producer
+    // COLD stream - producer is NOT shared
+    let i = 0;
+    setInterval(() => {
+      obs.next(i);
+      i += 1;
+    }, delayInMs);
+  });
 
 }
 
 function intervalTask() {
-  const interval$ = myInterval$(1000)
+  const interval$ = myInterval$(500)
   interval$.subscribe({
     next(value) {
       console.log('NEXT intervalTask', value);
@@ -113,6 +126,23 @@ function intervalTask() {
       console.log('COMPLETE intervalTask');
     },
   });
+
+  // 2nd subscriber
+  interval$.subscribe({
+    next(value) {
+      console.log('NEXT --2nd--- intervalTask', value);
+    },
+  });
+  // 3rd subscriber
+
+  setTimeout(() => {
+    interval$.subscribe({
+      next(value) {
+        console.log('NEXT --3rd--- intervalTask', value);
+      },
+    });
+  }, 4200);
+
 }
 
 // TODO task: myFullObserver(tag)
@@ -184,7 +214,8 @@ function throwTask() {
 
 export function myObservablesApp() {
   // example1();
-  timeoutTask();
+  // timeoutTask();
+  intervalTask();
   // intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
