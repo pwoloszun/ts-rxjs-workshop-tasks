@@ -249,14 +249,28 @@ function myWithLatestFrom$(source$: Observable<any>, other$: Observable<any>): O
 }
 
 function taskWithLatestFrom() {
-  const slow$ = myInterval$(800);
-  const quick$ = myInterval$(4200);
+  const quick$ = myInterval$(800);
+  const slow$ = myInterval$(2500);
 
-  // myWithLatestFrom$(quick$, slow$)
-  //   .subscribe(fullObserver('taskWithLatestFrom: quick, slow'));
+  myWithLatestFrom$(quick$, slow$)
+    .subscribe(fullObserver('taskWithLatestFrom: quick, slow'));
+  // [3, 0]
+  // [4, 0]
+  // [5, 0]
+  // [5, 0] //4800
+  // [6, 1]
+  // [7, 1]
+  // [8, 1] // 7200
+  // [9, 2]
+  // ...
+
 
   myWithLatestFrom$(slow$, quick$)
     .subscribe(fullObserver('taskWithLatestFrom: slow, quick 2'));
+  // [0, 2]
+  // [1, 5]
+  // [2, 8]
+  // ...
 }
 
 export function myOperatorsApp() {
