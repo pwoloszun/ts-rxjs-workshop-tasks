@@ -198,6 +198,7 @@ function taskReduce() {
     -5
   );
   mltpResult$.subscribe(fullObserver('taskReduce'));
+  // -600, COMPLETE
 }
 
 // TODO myBufferCount$
