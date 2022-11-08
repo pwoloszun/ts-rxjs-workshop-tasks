@@ -76,11 +76,14 @@ export function myTimeout$(delayInMs: number): Observable<void> {
       obs.complete();
     }, delayInMs);
 
+    // "Cleanup" fn called IF any of following happens:
+    // - obs.complete() OR
+    // - obs.error(...) OR
+    // - client code: subscription.unsubscribe()
     return () => { // cleanup
       console.log('CLEANUP:',);
       clearTimeout(timeoutId);
     };
-    // called IF: obs.complete OR obs.error OR subsc.unsubscribe
   });
 
 }
