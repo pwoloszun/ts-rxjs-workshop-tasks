@@ -68,14 +68,41 @@ setTimeout(() => {
 
 // TODO myTimeout$()
 export function myTimeout$(delayInMs: number): Observable<void> {
+
   return new Observable((obs) => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
+      console.log('LEAK:',);
       obs.next();
       obs.complete();
     }, delayInMs);
+
+    return () => { // cleanup
+      console.log('CLEANUP:',);
+      clearTimeout(timeoutId);
+    };
+    // called IF: obs.complete OR obs.error OR subsc.unsubscribe
   });
 
 }
+
+export function myTimeout$_LEAK(delayInMs: number): Observable<void> {
+
+  return new Observable((obs) => {
+
+    const timeoutId = setTimeout(() => {
+      console.log('LEAK:',);
+      obs.next();
+      obs.complete();
+    }, delayInMs);
+
+    return () => { // cleanup
+      console.log('CLEANUP:',);
+    };
+    // called IF: obs.complete OR obs.error OR subsc.unsubscribe
+  });
+
+}
+
 
 function timeoutTask() {
   const timeout$ = myTimeout$(2000); // nothing happens
