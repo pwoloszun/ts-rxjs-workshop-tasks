@@ -56,9 +56,6 @@ function example1() {
 
 
 //======
-setTimeout(() => {
-  // ...
-}, 2000);
 
 
 // setTimeout(() => {
@@ -135,10 +132,14 @@ export function myInterval$(delayInMs: number): Observable<number> {
     // COLD stream - each subscription has separate, independent producer
     // COLD stream - producer is NOT shared
     let i = 0;
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       obs.next(i);
       i += 1;
     }, delayInMs);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   });
 
 }
