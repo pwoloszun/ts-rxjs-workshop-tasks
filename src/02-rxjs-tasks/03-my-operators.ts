@@ -244,7 +244,7 @@ function taskStartsWith() {
     .subscribe(fullObserver('taskStartsWith'));
 }
 
-function myWithLatestFrom$(source$: Observable<any>, other$: Observable<any>): Observable<any> {
+function myWithLatestFrom$<T, K>(source$: Observable<T>, other$: Observable<K>): Observable<[T, K]> {
   return NEVER;
 }
 
