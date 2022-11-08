@@ -133,6 +133,7 @@ export function myInterval$(delayInMs: number): Observable<number> {
     // COLD stream - producer is NOT shared
     let i = 0;
     const intervalId = setInterval(() => {
+      // console.log('LEAK:',);
       obs.next(i);
       i += 1;
     }, delayInMs);

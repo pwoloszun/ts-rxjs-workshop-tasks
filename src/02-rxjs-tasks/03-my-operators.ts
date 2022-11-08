@@ -8,7 +8,7 @@ export function myTake$<T>(source$: Observable<T>, count: number) {
   return new Observable(function (obs) {
     let i = 0;
 
-    source$.subscribe({
+    const srcSub = source$.subscribe({
       next(value) {
         if (i < count) {
           obs.next(value);
@@ -27,18 +27,21 @@ export function myTake$<T>(source$: Observable<T>, count: number) {
       },
     });
 
+    return () => {
+      srcSub.unsubscribe();
+    };
   });
 
 }
 
 function taskTake() {
-  const interval$ = myInterval$(1000);
+  const interval$ = myInterval$(500);
   const firstFour$ = myTake$(interval$, 4);
   firstFour$.subscribe(fullObserver('taskTake'));
 
-  const letters$ = myFromArray$(['a', 'b']);
-  const firstFourLetter$ = myTake$(letters$, 4);
-  firstFourLetter$.subscribe(fullObserver('taskTake'));
+  // const letters$ = myFromArray$(['a', 'b']);
+  // const firstFourLetter$ = myTake$(letters$, 4);
+  // firstFourLetter$.subscribe(fullObserver('taskTake'));
 }
 
 
