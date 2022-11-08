@@ -68,7 +68,13 @@ setTimeout(() => {
 
 // TODO myTimeout$()
 export function myTimeout$(delayInMs: number): Observable<void> {
-  return NEVER; // TODO
+  return new Observable((obs) => {
+    setTimeout(() => {
+      obs.next();
+      obs.complete();
+    }, delayInMs);
+  });
+
 }
 
 function timeoutTask() {
@@ -89,7 +95,9 @@ function timeoutTask() {
 
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
+
   return NEVER; // TODO
+
 }
 
 function intervalTask() {
@@ -175,8 +183,8 @@ function throwTask() {
 // TODO task: myOf$
 
 export function myObservablesApp() {
-  example1();
-  // timeoutTask();
+  // example1();
+  timeoutTask();
   // intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
