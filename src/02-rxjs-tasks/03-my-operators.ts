@@ -220,7 +220,7 @@ function taskReduce() {
 }
 
 // TODO myBufferCount$
-function myBufferCount$(source$: Observable<any>, bufferSize: number) {
+function myBufferCount$<T>(source$: Observable<T>, bufferSize: number): Observable<T[]> {
   return NEVER;
 }
 
@@ -228,6 +228,10 @@ function taskBufferCount() {
   const values$ = myRange$(0, 67);
   myBufferCount$(values$, 25)
     .subscribe(fullObserver('taskBufferCount'));
+  // [0..24]
+  // [25..49]
+  // [50..66]
+  // COMPLETE
 }
 
 function myStartsWith$(source$: Observable<any>, startValue: any) {
