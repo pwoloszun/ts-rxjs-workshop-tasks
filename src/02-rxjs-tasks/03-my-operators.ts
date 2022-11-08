@@ -187,7 +187,25 @@ function myReduce$<T, K>(
   accumulatorFn: (memo: K, item: T) => K,
   startValue: K
 ): Observable<K> {
-  return NEVER;
+
+
+  return new Observable((obs) => {
+    let memo = startValue;
+
+    const srcSub = source$.subscribe({
+      next(value) {
+        memo = accumulatorFn(memo, value);
+      },
+      complete() {
+        obs.next(memo);
+        obs.complete();
+      },
+    });
+
+    return () => srcSub.unsubscribe();
+  });
+
+
 }
 
 function taskReduce() {
@@ -239,12 +257,12 @@ function taskWithLatestFrom() {
 
 export function myOperatorsApp() {
   // taskTake();
-  taskSkip();
+  // taskSkip();
   // taskMap();
   // taskFilter();
   // taskTakeWhile();
   // taskFirst();
-  // taskReduce();
+  taskReduce();
   // taskBufferCount();
   // taskStartsWith();
   // taskWithLatestFrom();
