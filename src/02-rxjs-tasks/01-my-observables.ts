@@ -1,21 +1,58 @@
 import { Observable, Observer, NEVER } from 'rxjs';
 
+// stream factory function
 export function myCustom$(name: string): Observable<string> {
-  return new Observable(function (obs) {
-    console.log('generating Observable');
-    // next
-    // error
-    // complete
+
+  return new Observable((obs) => { // tream generator function
+    obs.next('TVP 1');
+
+    setTimeout(() => {
+      obs.next('TVP 2');
+      obs.next('TVP 3');
+      obs.complete();
+    }, 2000);
+
+    obs.next('TVP 4');
   });
+
 }
 
 function example1() {
+  console.log('example1 RUN:',);
+
   const custom$ = myCustom$('bob'); // nothing happens
+
   // custom$.subscribe((value: string) => console.log('[NEXT] timeout', value));
+
+  custom$.subscribe({
+    next(value) {
+      // side effect 
+      console.log('[NEXT] example1:', value);
+    },
+    error(err) {
+      console.log('[ERROR] example1', err);
+    },
+    complete() {
+      console.log('[COMPLETE] example1');
+    },
+  });
+
+  // custom$.subscribe({
+  //   next(value) {
+  //     // side effect 
+  //     console.log('[NEXT] --2nd-- example1:', value);
+  //   },
+  // });
+
+
   // TODO 1b: next(), error(), complete()
   // TODO 2: each subscribe call generating fn
   // custom$.subscribe(fullObserver('example1'));
 }
+
+
+
+
 
 
 //======
@@ -130,7 +167,7 @@ function throwTask() {
 // TODO task: myOf$
 
 export function myObservablesApp() {
-  // example1();
+  example1();
   // timeoutTask();
   // intervalTask();
   // fromArrayTask();
