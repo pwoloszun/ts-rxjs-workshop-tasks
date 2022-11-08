@@ -156,7 +156,7 @@ function taskFilter() {
 }
 
 // TODO task: myTakeWhile$
-function myTakeWhile$(source$: Observable<any>, predicate: Function): Observable<any> {
+function myTakeWhile$<T>(source$: Observable<T>, predicate: (item: T) => boolean): Observable<T> {
   return NEVER;
 }
 
@@ -182,7 +182,11 @@ function taskFirst() {
 }
 
 // TODO task: myReduce$
-function myReduce$(source$: Observable<any>, accumulatorFn: Function, startValue: any): Observable<any> {
+function myReduce$<T, K>(
+  source$: Observable<T>,
+  accumulatorFn: (memo: K, item: T) => K,
+  startValue: K
+): Observable<K> {
   return NEVER;
 }
 
