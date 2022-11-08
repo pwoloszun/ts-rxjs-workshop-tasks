@@ -266,6 +266,8 @@ function taskStartsWith() {
     .subscribe(fullObserver('taskStartsWith'));
 }
 
+// master - slave
+// leader - follower
 function myWithLatestFrom$<T, K>(source$: Observable<T>, other$: Observable<K>): Observable<[T, K]> {
   return NEVER;
 }
@@ -279,8 +281,7 @@ function taskWithLatestFrom() {
   // [3, 0]
   // [4, 0]
   // [5, 0]
-  // [5, 0] //4800
-  // [6, 1]
+  // [6, 1] //4800
   // [7, 1]
   // [8, 1] // 7200
   // [9, 2]
