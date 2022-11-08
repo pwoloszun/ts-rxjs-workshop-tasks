@@ -1,5 +1,5 @@
 // Observable creators
-import { interval, from, range } from 'rxjs';
+import { interval, from, range, } from 'rxjs';
 
 // operators
 import {
@@ -21,6 +21,29 @@ import {
   startWith,
   withLatestFrom,
 } from 'rxjs/operators';
+import { myInterval$ } from './01-my-observables';
+
+// mySkip$(
+//   myFilter$(
+//     myMap$(
+//       myInterval$(1000),
+//       (i) => i * 10
+//     ),
+//     (n) => n % 2 === 0
+//   ),
+//   5
+// )
+
+
+// interval(1000).pipe(
+//   map((i) => i * 3),
+//   filter((n) => n % 2 === 0),
+//   skip(5)
+// ).subscribe();
+
+
+
+
 
 import { fullObserver } from './utils';
 
@@ -37,7 +60,9 @@ function example1() {
     takeWhile((name) => name !== 'ADMIN'),
     map((name) => `Hello ${name}`),
     delay(1200)
-  ).subscribe(fullObserver('example1'));
+  ).subscribe(fullObserver(`example1`));
+
+
 }
 
 // TODO example 3:
@@ -48,13 +73,21 @@ function example1() {
 // wyniki zaloguj na konsoli
 function example3() {
   const names = ['bob', 'ed', 'kate', 'ADMIN', 'boby'];
-  // TODO
+
+  interval(1200).pipe(
+    take(names.length),
+    map((i) => names[i]),
+    takeWhile((name) => name !== 'ADMIN'),
+    map((name) => `Hello ${name}`),
+  ).subscribe(fullObserver(`exmpl3`));
+
+
 }
 
 
 // TODO task 1:
 // wygeneruj liczby z przedzialu [5..21] ->
-// odfiltruj tylko nieparzyste ->
+// zostaw tylko nieparzyste ->
 // pomin pierwsze 3 ->
 // z pozostalych wez tylko pierwsze 4 ->
 // przemapuj na kwadraty tych liczb ->
@@ -66,8 +99,8 @@ function task1() {
 // stworz interwal co 0.8s ->
 // pomin pierwsza wygenerowana liczbe
 // z pozostalych, wez tylko 10 pierwszych wynikow ->
-// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb ->
-// kazdy posredni wynik zaloguj na konsoli ("side effect")->
+// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb -> SCAN
+// kazdy posredni wynik zaloguj na konsoli ("side effect")-> TAP
 // wez tylko ostatni obliczony wynik ->
 // ostatni iloczyn zaloguj na konsoli
 function task2() {
@@ -122,7 +155,7 @@ function task6() {
 export function builtInApp() {
   // example1();
   // example2();
-  // example3();
+  example3();
   // task1();
   // task2();
   // task3();
