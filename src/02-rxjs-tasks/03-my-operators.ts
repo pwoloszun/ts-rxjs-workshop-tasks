@@ -7,7 +7,6 @@ export function myTake$<T>(source$: Observable<T>, count: number) {
 
   return new Observable(function (obs) {
     let i = 0;
-
     const srcSub = source$.subscribe({
       next(value) {
         if (i < count) {
@@ -17,7 +16,6 @@ export function myTake$<T>(source$: Observable<T>, count: number) {
         if (i >= count) {
           obs.complete();
         }
-
       },
       error(err) {
         obs.error(err);
@@ -27,9 +25,7 @@ export function myTake$<T>(source$: Observable<T>, count: number) {
       },
     });
 
-    return () => {
-      srcSub.unsubscribe();
-    };
+    return () => srcSub.unsubscribe();
   });
 
 }
@@ -45,10 +41,35 @@ function taskTake() {
 }
 
 
+
+
+
+
+
 // TODO task: mySkip$
 function mySkip$(source$: Observable<any>, count: number): Observable<any> {
   return NEVER;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function taskSkip() {
   const interval$ = myInterval$(500);
@@ -57,7 +78,7 @@ function taskSkip() {
 }
 
 // TODO task: myMap$
-function myMap$(source$: Observable<any>, mappingFn: Function): Observable<any> {
+function myMap$<T, K>(source$: Observable<T>, mappingFn: (item: T) => K): Observable<K> {
   return NEVER;
 }
 
@@ -72,7 +93,7 @@ function taskMap() {
 }
 
 // TODO task: myFilter$
-function myFilter$(source$: Observable<any>, filteringFn: Function): Observable<any> {
+function myFilter$<T>(source$: Observable<T>, filteringFn: (item: T) => boolean): Observable<T> {
   return NEVER;
 }
 
