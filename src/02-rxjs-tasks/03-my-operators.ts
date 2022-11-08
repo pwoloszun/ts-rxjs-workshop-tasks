@@ -269,7 +269,34 @@ function taskStartsWith() {
 // master - slave
 // leader - follower
 function myWithLatestFrom$<T, K>(source$: Observable<T>, other$: Observable<K>): Observable<[T, K]> {
-  return NEVER;
+
+  return new Observable((obs) => {
+    let hasOtherEmitted = false;
+    let otherLastValue: K | undefined = undefined;
+    const srcSub = source$.subscribe({
+      next(value) {
+        if (hasOtherEmitted) {
+          obs.next([value, otherLastValue!]);
+        }
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+
+    const otherSub = other$.subscribe({
+      next(value) {
+        hasOtherEmitted = true;
+        otherLastValue = value;
+      },
+    });
+
+    return () => {
+      srcSub.unsubscribe();
+      otherSub.unsubscribe();
+    };
+  });
+
 }
 
 function taskWithLatestFrom() {
@@ -278,10 +305,13 @@ function taskWithLatestFrom() {
 
   myWithLatestFrom$(quick$, slow$)
     .subscribe(fullObserver('taskWithLatestFrom: quick, slow'));
-  // [3, 0]
-  // [4, 0]
-  // [5, 0]
-  // [6, 1] //4800
+  // [0, undefined] // 800
+  // [1, undefin] // 1600
+  // [2, undefin] 2400 --- 2500
+  // [3, 0] // 3200
+  // [4, 0] // 4000
+  // [5, 0] // 4800 -- 5000
+  // [6, 1] // 5600
   // [7, 1]
   // [8, 1] // 7200
   // [9, 2]
@@ -304,7 +334,7 @@ export function myOperatorsApp() {
   // taskTakeWhile();
   // taskFirst();
   // taskReduce();
-  taskBufferCount();
+  // taskBufferCount();
   // taskStartsWith();
-  // taskWithLatestFrom();
+  taskWithLatestFrom();
 }
