@@ -151,8 +151,14 @@ function myFullObserver(tag: string): Observer<any> {
 }
 
 // TODO task: myFromArray$
-export function myFromArray$(items: any[]): Observable<any> {
-  return NEVER; // TODO
+export function myFromArray$<T>(items: T[]): Observable<T> {
+  return new Observable((obs) => {
+    for (let index = 0; index < items.length; index++) {
+      const element = items[index];
+      obs.next(element);
+    }
+    obs.complete();
+  });
 }
 
 function fromArrayTask() {
@@ -215,9 +221,8 @@ function throwTask() {
 export function myObservablesApp() {
   // example1();
   // timeoutTask();
-  intervalTask();
   // intervalTask();
-  // fromArrayTask();
+  fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
   // rangeTask();
