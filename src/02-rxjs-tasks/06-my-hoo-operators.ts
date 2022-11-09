@@ -74,8 +74,43 @@ function exampleMyConcatAll() {
 }
 
 // TODO: mySwitchAll$
-function mySwitchAll$($sourceHoo: Observable<Observable<any>>) {
-  return new Observable(function () {
+function mySwitchAll$(sourceHoo$: Observable<Observable<any>>) {
+  return new Observable(function (obs) {
+    const subsCont = new Subscription();
+    let innerSub: Subscription | null = null;
+    let isHooActive = true;
+    let isInnerActive = false;
+
+    const hooSub = sourceHoo$.subscribe({
+      next(inner$) {
+        // NEW inner$!!!
+        if (innerSub !== null) {
+          innerSub.unsubscribe();
+        }
+        isInnerActive = true;
+        innerSub = inner$.subscribe({
+          next(value) {
+            obs.next(value);
+          },
+          complete() {
+            isInnerActive = false;
+            if (!isHooActive) {
+              obs.complete();
+            }
+          },
+        });
+        subsCont.add(innerSub);
+      },
+      complete() {
+        isHooActive = false;
+        if (!isInnerActive) {
+          obs.complete();
+        }
+      },
+    });
+    subsCont.add(hooSub);
+
+    return () => subsCont.unsubscribe();
   });
 }
 
@@ -118,8 +153,8 @@ function exampleMyExhaustAll() {
 
 
 export function myHooOperatorsApp() {
-  exampleMyMergeAll();
+  // exampleMyMergeAll();
   // exampleMyConcatAll();
-  // exampleMySwitchAll();
+  exampleMySwitchAll();
   // exampleMyExhaustAll();
 }
