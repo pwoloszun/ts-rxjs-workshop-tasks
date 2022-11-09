@@ -1,5 +1,5 @@
-import { interval, of, race, concat, merge, NEVER } from 'rxjs';
-import { map, take, delay } from 'rxjs/operators';
+import { interval, of, race, concat, merge, NEVER, combineLatest } from 'rxjs';
+import { map, take, delay, catchError, startWith, retry, combineLatestWith } from 'rxjs/operators';
 
 import { fullObserver } from './utils';
 
@@ -34,7 +34,9 @@ function concatExample() {
 function raceExample() {
   const quick$ = myStream$('quick', 400);
   const medium$ = myStream$('medium', 1000);
-  const slow$ = myStream$('slow', 2200);
+  const slow$ = myStream$('slow', 2200).pipe(
+    startWith('qq')
+  );
 
   race(quick$, medium$, slow$).subscribe(fullObserver('race'));
 }
@@ -88,4 +90,30 @@ export function combineMultipleStreamsApp() {
   // testUserTransactions();
   // task1();
   // task2();
+}
+
+
+function parallelReqestsTask() {
+  const firstHttpReq$ = myStream$('1st REQ', 300);
+
+  const firstWithErrHndl$ = firstHttpReq$.pipe(
+    startWith
+  );
+
+  const getRoleHttpReq$ = myStream$('2nd REQ', 1000).pipe(
+    catchError((err) => {
+      return of(UNDEF_ROLE)
+    })
+  );
+
+
+  combineLatest([firstWithErrHndl$, getRoleHttpReq$]).pipe(
+    
+    catchError((err) => {
+      // local err handle
+      throw err;
+    })
+  ).subscribe(([firstResp, secondResp]) => {
+    console.log('do smth:', firstResp, secondResp);
+  })
 }

@@ -1,11 +1,14 @@
-import { forkJoin, interval, of, from, timer, NEVER } from 'rxjs';
+import { forkJoin, interval, of, from, timer, NEVER, fromEvent } from 'rxjs';
 import {
+  concatAll,
   concatMap,
   delay,
+  exhaustAll,
   exhaustMap,
   map,
   mergeAll,
   mergeMap,
+  switchAll,
   switchMap,
   switchMapTo,
   take,
@@ -17,16 +20,62 @@ import { fullObserver, items$, randomBetween } from './utils';
 
 
 function btnClick$(delay: number, count: number) {
-  // TODO
+  return interval(delay).pipe(
+    take(count),
+    tap(() => console.log('usr CLICK')),
+  );
 }
 
 function fetchData$(url: string, respnseTime: number) {
-  // TODO
+  console.log('REQUEST:', url);
+  return timer(respnseTime).pipe(
+    tap(() => console.log(`RESPONSE: ${url}`)),
+    map(() => ({ name: `bob ${Math.random()}`, age: 123 }))
+  );
 }
 
-export function hooExamples() {
-  // TODO
+export function clientCode_ngApp() {
+
+  const fetchOnClickHOO$ = btnClick$(1000, 2).pipe(
+    // map((n) => {
+    //   const httpReq$ = fetchData$('/user/100', 3500);
+    //   return httpReq$
+    // }),
+    // exhaustAll(),
+    // mergeAll()
+    // switchAll()
+    // concatAll()
+
+    exhaustMap(() => {
+      const httpReq$ = fetchData$('/user/100', 3500);
+      return httpReq$
+    })
+  );
+
+
+  // fetchOnClickHOO$.subscribe({
+  //   next(inner$) {
+  //     inner$.subscribe({
+  //       next(value) {
+  //         console.log('RENDER USER:', value);
+  //       }
+  //     });
+  //   }
+  // });
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function example1() {

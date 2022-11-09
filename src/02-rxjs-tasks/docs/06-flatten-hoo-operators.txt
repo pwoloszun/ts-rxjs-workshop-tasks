@@ -5,11 +5,11 @@ Combine multiple streams
 1) mergeAll() - subscribes to all given streams
 
 ===
-2) concatMap() - in sequence, for each stream:
+2) concatAll() - in sequence, for each stream:
 subscribes to it, when it's complete, then subscribes to another and so on
 
 ===
-3) switchMap() - subscribes to only most recent (last) stream that has produced values,
+3) switchAll() - subscribes to only most recent (last) stream that has produced values,
  unsubscribes("cancels") from previous pending streams
 
 ===
