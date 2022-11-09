@@ -71,6 +71,21 @@ function exampleMyConcatAll() {
 
   myConcatAll$(higherOrderStream$)
     .subscribe(fullObserver('exampleMyConcatAll'));
+  // A0..A4 B0..B2 COMPLETE
+}
+
+function exampleMyConcatAll_2nd() {
+  const a$ = letterStream$('A', { delayInMs: 600, count: 2 });
+  const b$ = letterStream$('B', { delayInMs: 900, count: 2 });
+  const lettersArr = [a$, b$];
+  const higherOrderStream$ = interval(2500).pipe(
+    take(lettersArr.length),
+    map((i) => lettersArr[i])
+  );
+
+  myConcatAll$(higherOrderStream$)
+    .subscribe(fullObserver('exampleMyConcatAll'));
+  // A0..A1 B0..B1 COMPLETE
 }
 
 // TODO: mySwitchAll$
