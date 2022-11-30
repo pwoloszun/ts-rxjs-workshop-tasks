@@ -12,6 +12,9 @@ function example1() {
   }, 2000);
 }
 
+
+// clearInterval(intervalId)
+
 // TODO: impl unsubscribe to: myInterval$()
 function task1() {
   // TODO
@@ -19,5 +22,5 @@ function task1() {
 
 export function mySubscriptionsApp() {
   example1();
-  // task1();
+  task1();
 }
