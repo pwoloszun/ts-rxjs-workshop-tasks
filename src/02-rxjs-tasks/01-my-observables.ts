@@ -5,17 +5,8 @@ export function myCustom$(name: string): Observable<any> {
 
   return new Observable((obs) => {
     // STREAM GENERATOR FN
-    // const person = { name: 'bob' };
-    // obs.next(person);
-    obs.next('qq 1');
-    setTimeout(() => {
-      // obs.next('qq 2');
-      // obs.next('qq 3');
-      // person.name = 'kate';
-    }, 2000);
-    obs.next('qq 4');
-
-    obs.complete();
+    // obs.error(new Error(`ola boga!`));
+    throw new Error(`ola boga!`);
   });
 
 }
@@ -142,6 +133,8 @@ function intervalTask() {
     },
   });
 
+  interval$.subscribe(myFullObserver('intervalTask'));
+
   setTimeout(() => {
     interval$.subscribe({
       next(value) {
@@ -153,7 +146,17 @@ function intervalTask() {
 
 // TODO task: myFullObserver(tag)
 function myFullObserver(tag: string): Observer<any> {
-  return null as any as Observer<any>;
+  return {
+    next(value) {
+      console.log(`NEXT ${tag}`, value);
+    },
+    error(err) {
+      console.log(`ERROR ${tag}`, err);
+    },
+    complete() {
+      console.log(`COMPLETE ${tag}`);
+    },
+  };
 }
 
 // TODO task: myFromArray$
@@ -224,7 +227,11 @@ function fromArrayWithDelayTask() {
 }
 
 function myThrow$(error: Error) {
-  return NEVER;
+
+  return new Observable((obs) => {
+    obs.error(error);
+  });
+
 }
 
 function throwTask() {
