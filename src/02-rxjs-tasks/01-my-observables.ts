@@ -106,6 +106,7 @@ export function myInterval$_HOT(delayInMs: number): Observable<number> {
       obs.next(i);
       i += 1;
     }, delayInMs);
+
   });
 
 }
@@ -115,10 +116,15 @@ export function myInterval$(delayInMs: number): Observable<number> {
 
   return new Observable((obs) => {
     let i = 0; // NOT Shared PRODUCER
-    setInterval(() => {
+    const intervalId = setInterval(() => {
+      console.log('LEAK:',);
       obs.next(i);
       i += 1;
     }, delayInMs);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   });
 
 }
