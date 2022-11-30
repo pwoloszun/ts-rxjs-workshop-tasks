@@ -178,8 +178,30 @@ function taskReduce() {
 }
 
 // TODO myBufferCount$
-function myBufferCount$(source$: Observable<any>, bufferSize: number) {
-  return NEVER;
+function myBufferCount$<T>(source$: Observable<T>, bufferSize: number) {
+
+  return new Observable(function (obs) {
+    let buffer: T[] = [];
+
+    const srcSub = source$.subscribe({
+      next(value) {
+        buffer.push(value);
+        if (buffer.length >= bufferSize) {
+          obs.next(buffer);
+          buffer = [];
+        }
+      },
+      complete() {
+        if (buffer.length > 0) {
+          obs.next(buffer);
+        }
+        obs.complete();
+      },
+    });
+
+    return () => srcSub.unsubscribe();
+  });
+
 }
 
 function taskBufferCount() {
@@ -191,6 +213,20 @@ function taskBufferCount() {
   // [50..66]
   // COMPLETE
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function myStartsWith$(source$: Observable<any>, startValue: any) {
   return NEVER;
@@ -204,8 +240,30 @@ function taskStartsWith() {
 
 // MASTER SLAVE
 // LEADER FOLLOWER
-function myWithLatestFrom$(source$: Observable<any>, other$: Observable<any>): Observable<any> {
-  return NEVER;
+function myWithLatestFrom$<T, K>(source$: Observable<T>, other$: Observable<K>): Observable<[T, K]> {
+  return new Observable((obs) => {
+    let hasOtherEmitted = false;
+    let lastOtherValue: K;
+
+    other$.subscribe({
+      next(value) {
+        hasOtherEmitted = true;
+        lastOtherValue = value;
+      },
+    });
+
+    source$.subscribe({
+      next(value) {
+        if (hasOtherEmitted) {
+          obs.next([value, lastOtherValue]);
+        }
+      },
+      complete() {
+        obs.complete();
+      },
+    });
+
+  });
 }
 
 function taskWithLatestFrom() {
@@ -216,7 +274,7 @@ function taskWithLatestFrom() {
     .subscribe(fullObserver('taskWithLatestFrom: quick, slow'));
   // ### 800 [0, --] 
   // ### 1600 [1, --]
-  // 2200 [1, 0]
+  // ### 2200 [1, 0]
   // 2400 [2, 0]
   // 3200 [3, 0]
   // 4000 [4, 0]
@@ -236,7 +294,7 @@ function taskWithLatestFrom() {
 }
 
 export function myOperatorsApp() {
-  taskTake();
+  // taskTake();
   // taskSkip();
   // taskMap();
   // taskFilter();
@@ -245,5 +303,5 @@ export function myOperatorsApp() {
   // taskReduce();
   // taskBufferCount();
   // taskStartsWith();
-  // taskWithLatestFrom();
+  taskWithLatestFrom();
 }
