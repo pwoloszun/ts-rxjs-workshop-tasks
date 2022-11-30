@@ -157,7 +157,7 @@ function myFullObserver(tag: string): Observer<any> {
 }
 
 // TODO task: myFromArray$
-export function myFromArray$(items: any[]): Observable<any> {
+export function myFromArray$<T>(items: T[]): Observable<T> {
   return NEVER; // TODO
 }
 
@@ -221,8 +221,8 @@ function throwTask() {
 export function myObservablesApp() {
   // example1();
   // timeoutTask();
-  intervalTask();
-  // fromArrayTask();
+  // intervalTask();
+  fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
   // rangeTask();
