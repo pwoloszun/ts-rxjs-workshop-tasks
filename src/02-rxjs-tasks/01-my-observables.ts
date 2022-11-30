@@ -100,9 +100,11 @@ function timeoutTask() {
 }
 
 // TODO task: myInterval$
+// HOT stream
 export function myInterval$(delayInMs: number): Observable<number> {
 
-  let i = 0;
+  let i = 0; // Shared PRODUCER
+
   return new Observable((obs) => {
     setInterval(() => {
       obs.next(i);
@@ -113,7 +115,8 @@ export function myInterval$(delayInMs: number): Observable<number> {
 }
 
 function intervalTask() {
-  const interval$ = myInterval$(500)
+  const interval$ = myInterval$(500);
+
   interval$.subscribe({
     next(value) {
       console.log('NEXT intervalTask', value);
@@ -123,6 +126,12 @@ function intervalTask() {
     },
     complete() {
       console.log('COMPLETE intervalTask');
+    },
+  });
+
+  interval$.subscribe({
+    next(value) {
+      console.log('NEXT 22 intervalTask', value);
     },
   });
 }
