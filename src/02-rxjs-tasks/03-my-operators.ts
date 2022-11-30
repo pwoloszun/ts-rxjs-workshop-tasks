@@ -53,7 +53,7 @@ function taskSkip() {
 }
 
 // TODO task: myMap$
-function myMap$(source$: Observable<any>, mappingFn: Function): Observable<any> {
+function myMap$<T, K>(source$: Observable<T>, mappingFn: (item: T) => K): Observable<K> {
   return NEVER;
 }
 
@@ -68,7 +68,7 @@ function taskMap() {
 }
 
 // TODO task: myFilter$
-function myFilter$(source$: Observable<any>, filteringFn: Function): Observable<any> {
+function myFilter$<T>(source$: Observable<T>, filteringFn: (item: T) => boolean): Observable<T> {
   return NEVER;
 }
 
