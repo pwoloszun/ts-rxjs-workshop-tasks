@@ -65,6 +65,11 @@ function example1() {
 
 
 // TODO myTimeout$()
+
+// setInterval(() => {
+
+// }, 3000)
+
 export function myTimeout$(delayInMs: number): Observable<void> {
 
   return new Observable((obs) => {
@@ -183,8 +188,8 @@ function throwTask() {
 
 export function myObservablesApp() {
   // example1();
-  timeoutTask();
-  // intervalTask();
+  // timeoutTask();
+  intervalTask();
   // fromArrayTask();
   // fromArrayWithDelayTask();
   // throwTask();
