@@ -101,11 +101,19 @@ function timeoutTask() {
 
 // TODO task: myInterval$
 export function myInterval$(delayInMs: number): Observable<number> {
-  return NEVER; // TODO
+
+  let i = 0;
+  return new Observable((obs) => {
+    setInterval(() => {
+      obs.next(i);
+      i += 1;
+    }, delayInMs);
+  });
+
 }
 
 function intervalTask() {
-  const interval$ = myInterval$(1000)
+  const interval$ = myInterval$(500)
   interval$.subscribe({
     next(value) {
       console.log('NEXT intervalTask', value);
