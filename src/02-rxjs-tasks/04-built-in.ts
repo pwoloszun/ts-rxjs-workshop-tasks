@@ -1,5 +1,5 @@
 // Observable creators
-import { interval, from, range } from 'rxjs';
+import { interval, from, range, pipe } from 'rxjs';
 
 // operators
 import {
@@ -21,8 +21,42 @@ import {
   startWith,
   withLatestFrom,
 } from 'rxjs/operators';
+import { myInterval$ } from './01-my-observables';
 
 import { fullObserver } from './utils';
+
+// mySkip$(
+//   myFilter(
+//     myMap(
+//       myInterval$(1000),
+//       (n) => n * 10
+//     ),
+//     (i) => i % 2 === 0
+//   ),
+//   3
+// )
+
+interval(1000).pipe(
+  map((n) => n * 10),
+  filter((i) => i % 2 === 0),
+  skip(3)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // TODO example 1:
 // wez tablice imion ->
@@ -35,7 +69,7 @@ function example1() {
   // TODO
   from(names).pipe(
     takeWhile((name) => name !== 'ADMIN'),
-    map((name) => `Hello ${name}`),
+    map((n) => `Hello ${n}!`),
     delay(1200)
   ).subscribe(fullObserver('example1'));
 }
@@ -66,8 +100,8 @@ function task1() {
 // stworz interwal co 0.8s ->
 // pomin pierwsza wygenerowana liczbe
 // z pozostalych, wez tylko 10 pierwszych wynikow ->
-// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb ->
-// kazdy posredni wynik zaloguj na konsoli ("side effect")->
+// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb -> SCAN
+// kazdy posredni wynik zaloguj na konsoli ("side effect")-> TAP
 // wez tylko ostatni obliczony wynik ->
 // ostatni iloczyn zaloguj na konsoli
 function task2() {
@@ -120,7 +154,7 @@ function task6() {
 }
 
 export function builtInApp() {
-  // example1();
+  example1();
   // example2();
   // example3();
   // task1();
