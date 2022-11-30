@@ -1,11 +1,13 @@
 import { fullObserver } from "./utils";
 import { myInterval$, myTimeout$ } from './01-my-observables';
+import { Subscription } from 'rxjs';
 
 function example1() {
-  const timeout$ = myTimeout$(5500);
-  const subscription = timeout$.subscribe(fullObserver('unsubscribe timeout'));
+  const timeout$ = myTimeout$(500);
+  const subscription: Subscription = timeout$.subscribe(fullObserver('unsubscribe timeout'));
 
   setTimeout(() => {
+    console.log('Clinet code UNSUB');
     subscription.unsubscribe();
   }, 2000);
 }
