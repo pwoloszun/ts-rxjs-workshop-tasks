@@ -1,5 +1,5 @@
 import { interval, of, race, concat, merge, NEVER, EMPTY, Observer, Observable } from 'rxjs';
-import { map, take, delay } from 'rxjs/operators';
+import { map, take, delay, withLatestFrom, startWith } from 'rxjs/operators';
 import { fullObserver } from './utils';
 
 function myNever<T>(): Observable<T> {
@@ -37,7 +37,13 @@ function concatExample() {
   const medium$ = myStream$('medium', 1000);
   const slow$ = myStream$('slow', 2200);
 
-  concat(api$.pipe(catchE), alternateApi$).subscribe(fullObserver('concat'));
+  concat(quick$, slow$).subscribe(fullObserver('concat'));
+
+
+  const initializedSlow$ = slow$.pipe(
+    startWith('DEFAULT')
+  );
+  withLatestFrom(initializedSlow$, quick$);
 
   // never runs
   // interval(500).pipe(

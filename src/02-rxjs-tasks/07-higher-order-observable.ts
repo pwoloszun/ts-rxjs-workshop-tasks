@@ -1,11 +1,14 @@
-import { forkJoin, interval, of, from, timer, NEVER } from 'rxjs';
+import { forkJoin, interval, of, from, timer, NEVER, fromEvent } from 'rxjs';
 import {
+  concatAll,
   concatMap,
   delay,
+  exhaustAll,
   exhaustMap,
   map,
   mergeAll,
   mergeMap,
+  switchAll,
   switchMap,
   switchMapTo,
   take,
@@ -17,16 +20,63 @@ import { fullObserver, items$, randomBetween } from './utils';
 
 
 function btnClick$(delay: number, count: number) {
-  // TODO
+  return interval(delay).pipe(
+    take(count),
+  );
 }
 
 function fetchData$(url: string, respnseTime: number) {
-  // TODO
+  return of(url).pipe(
+    delay(respnseTime),
+    map(() => ({ id: 100, name: 'bob' }))
+  );
 }
 
 export function hooExamples() {
-  // TODO
+
+  const hoo$ = btnClick$(700, 3).pipe(
+    // map(() => {
+    //   const inner$ = fetchData$('/user/100', 1800);
+    //   return inner$;
+    // }),
+    // mergeAll(),
+
+    // mergeMap(() => {
+    //   const inner$ = fetchData$('/user/100', 1800);
+    //   return inner$;
+    // }),
+
+    // switchAll()
+    // exhaustAll()
+    // concatAll()
+  );
+
+  hoo$.subscribe({
+    next(userData) {
+      // side effect
+      console.log('SIDE EFF:', userData);
+    },
+  });
+
+  // hoo$.subscribe({
+  //   next(inner$) {
+  //     inner$.subscribe({
+  //       next(userData) {
+  //         // side effect
+  //         console.log('SIDE EFF:', userData);
+  //       },
+  //     })
+  //   },
+  // });
+
 }
+
+
+
+
+
+
+
 
 
 function example1() {
