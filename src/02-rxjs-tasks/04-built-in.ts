@@ -159,8 +159,26 @@ function task6() {
   // TODO
 }
 
+function pipeExample() {
+  const myFn = pipe(
+    filter<number>((n) => n % 2 === 0),
+    map((n) => n ** 2)
+  );
+
+  const interval$ = interval(500);
+
+  // 1st pipe example
+  const result$ = myFn(interval$);
+  result$.subscribe(fullObserver('1st pipe example'));
+
+  // 2nd pipe example
+  // interval$.pipe(
+  //   myFn
+  // ).subscribe(fullObserver('2nd pipe example'));
+}
+
 export function builtInApp() {
-  example1();
+  // example1();
   // example2();
   // example3();
   // task1();
@@ -169,4 +187,5 @@ export function builtInApp() {
   // task4();
   // task5();
   // task6();
+  pipeExample();
 }
