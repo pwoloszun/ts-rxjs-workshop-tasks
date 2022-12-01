@@ -172,9 +172,9 @@ function pipeExample() {
   result$.subscribe(fullObserver('1st pipe example'));
 
   // 2nd pipe example
-  // interval$.pipe(
-  //   myFn
-  // ).subscribe(fullObserver('2nd pipe example'));
+  interval$.pipe(
+    myFn
+  ).subscribe(fullObserver('2nd pipe example'));
 }
 
 export function builtInApp() {
