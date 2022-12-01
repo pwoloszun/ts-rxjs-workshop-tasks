@@ -14,7 +14,32 @@ function letterStream$(letter: string, { delayInMs, count }: { delayInMs: number
 export function myMergeAll$<T>(sourceHoo$: Observable<Observable<T>>): Observable<T> {
 
   return new Observable(function (obs) {
-    
+    let isHooComplete = false;
+    let activeInnerCount = 0;
+
+    sourceHoo$.subscribe({
+      next(inner$) {
+        activeInnerCount += 1;
+        inner$.subscribe({
+          next(value) {
+            obs.next(value);
+          },
+          complete() {
+            activeInnerCount -= 1;
+            if (activeInnerCount <= 0 && isHooComplete) {
+              obs.complete();
+            }
+          },
+        });
+      },
+      complete() {
+        isHooComplete = true;
+        if (activeInnerCount <= 0) {
+          obs.complete();
+        }
+      },
+    });
+
   });
 
 }
@@ -22,7 +47,13 @@ export function myMergeAll$<T>(sourceHoo$: Observable<Observable<T>>): Observabl
 function exampleMyMergeAll() {
   const a$ = letterStream$('A', { delayInMs: 600, count: 5 });
   const b$ = letterStream$('B', { delayInMs: 1500, count: 3 });
+  // const c$ = of('C0');
   const higherOrderStream$ = from([a$, b$]);
+  // const arr = [a$, b$,];
+  // const higherOrderStream$ = interval(60 * 1000).pipe(
+  //   take(arr.length),
+  //   map((i) => arr[i])
+  // );
 
   myMergeAll$(higherOrderStream$)
     .subscribe(fullObserver('exampleMyMergeAll'));
