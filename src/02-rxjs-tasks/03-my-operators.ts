@@ -238,15 +238,44 @@ function taskStartsWith() {
 // MASTER - SLAVE
 // Leader - Follower
 function myWithLatestFrom$(source$: Observable<any>, other$: Observable<any>): Observable<any> {
-  return NEVER;
+
+  return new Observable(function (obs) {
+    let otherValue: any;
+    let hasOtherEmitted = false;
+
+    const otherSub = other$.subscribe({
+      next(value) {
+        otherValue = value;
+        hasOtherEmitted = true;
+      },
+    });
+
+    const srcSub = source$.subscribe({
+      next(value) {
+        if (hasOtherEmitted) {
+          obs.next([value, otherValue]);
+        }
+      },
+      complete() {
+        obs.complete();
+      }
+    });
+
+    // cleanup
+    return () => {
+      srcSub.unsubscribe();
+      otherSub.unsubscribe();
+    };
+  });
+
 }
 
 function taskWithLatestFrom() {
   const slow$ = myInterval$(4200);
   const quick$ = myInterval$(800);
 
-  myWithLatestFrom$(quick$, slow$)
-    .subscribe(fullObserver('taskWithLatestFrom: quick, slow'));
+  // myWithLatestFrom$(quick$, slow$)
+  //   .subscribe(fullObserver('taskWithLatestFrom: quick, slow'));
   // -- [0, _]
   // -- [1, _]
   // -- [2, _]
@@ -258,8 +287,8 @@ function taskWithLatestFrom() {
   // [7, 0]
   // ...
 
-  // myWithLatestFrom$(slow$, quick$)
-  //   .subscribe(fullObserver('taskWithLatestFrom: slow, quick 2'));
+  myWithLatestFrom$(slow$, quick$)
+    .subscribe(fullObserver('taskWithLatestFrom: slow, quick 2'));
   // -- [_, 0]
   // -- [_, 1]
   // -- [_, 2]
@@ -278,7 +307,7 @@ function taskWithLatestFrom() {
 
 export function myOperatorsApp() {
   // taskTake();
-  taskSkip();
+  // taskSkip();
   // taskMap();
   // taskFilter();
   // taskTakeWhile();
@@ -286,5 +315,5 @@ export function myOperatorsApp() {
   // taskReduce();
   // taskBufferCount();
   // taskStartsWith();
-  // taskWithLatestFrom();
+  taskWithLatestFrom();
 }
