@@ -115,6 +115,7 @@ export function myInterval$(delayInMs: number): Observable<number> {
     // NOT SHARED producer
     let i = 0; // data PRODUCER
     const intervalId = setInterval(() => {
+      console.log('interval LEAK:',);
       obs.next(i);
       i += 1;
     }, delayInMs);
