@@ -135,7 +135,25 @@ function taskFilter() {
 
 // TODO task: myTakeWhile$
 function myTakeWhile$(source$: Observable<any>, predicate: Function): Observable<any> {
-  return NEVER;
+
+  return new Observable(function (obs) {
+    const srcSub = source$.subscribe({
+      next(value) {
+        if (predicate(value)) {
+          obs.next(value);
+        } else {
+          obs.complete();
+        }
+      },
+      complete() {
+        obs.complete();
+      }
+    });
+
+    // cleanup
+    return () => srcSub.unsubscribe();
+  });
+
 }
 
 function taskTakeWhile() {
