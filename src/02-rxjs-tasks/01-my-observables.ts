@@ -1,17 +1,47 @@
 import { Observable, Observer, NEVER } from 'rxjs';
 
+// factory function
 export function myCustom$(name: string): Observable<string> {
-  return new Observable(function (obs) {
-    console.log('generating Observable');
-    // next
-    // error
-    // complete
+
+  return new Observable((obs) => {
+
+    obs.next('tvp 1');
+    obs.next('tvp 2');
+    obs.next('tvp 3');
+
+    obs.complete();
+
   });
+
 }
 
 function example1() {
   const custom$ = myCustom$('bob'); // nothing happens
-  // custom$.subscribe((value: string) => console.log('[NEXT] timeout', value));
+
+  custom$.subscribe({
+    next(value) {
+      console.log('[NEXT] example1:', value);
+    },
+    error(err) {
+      console.log('[ERROR] example1:', err);
+    },
+    complete() {
+      console.log('[COMPLETE] example1:');
+    }
+  });
+
+
+  custom$.subscribe({
+    next(value) {
+      console.log('[NEXT22] example1:', value);
+    },
+    error(err) {
+      console.log('[ERROR22] example1:', err);
+    },
+    complete() {
+      console.log('[COMPLETE22] example1:');
+    }
+  });
   // TODO 1b: next(), error(), complete()
   // TODO 2: each subscribe call generating fn
   // custom$.subscribe(fullObserver('example1'));
@@ -130,7 +160,7 @@ function throwTask() {
 // TODO task: myOf$
 
 export function myObservablesApp() {
-  // example1();
+  example1();
   // timeoutTask();
   // intervalTask();
   // fromArrayTask();
