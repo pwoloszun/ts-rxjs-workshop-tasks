@@ -18,9 +18,9 @@ export function myTake$(source$: Observable<any>, count: number) {
           obs.complete();
         }
       },
-      error(err) {
-        obs.error(err);
-      },
+      // error(err) {
+      //   obs.error(err);
+      // },
       complete() {
         obs.complete();
       }
@@ -44,7 +44,26 @@ function taskTake() {
 
 // TODO task: mySkip$
 function mySkip$(source$: Observable<any>, count: number): Observable<any> {
-  return NEVER;
+
+  return new Observable(function (obs) {
+    let i = 0;
+
+    const srcSub = source$.subscribe({
+      next(value) {
+        i += 1;
+        if (i > count) {
+          obs.next(value);
+        }
+      },
+      complete() {
+        obs.complete();
+      }
+    });
+
+    // cleanup
+    return () => srcSub.unsubscribe();
+  });
+
 }
 
 function taskSkip() {
@@ -121,6 +140,8 @@ function taskReduce() {
     (memo: any, item: any) => memo * item,
     -5
   );
+  // -600
+  // COMPLETE
   mltpResult$.subscribe(fullObserver('taskReduce'));
 }
 
@@ -161,8 +182,8 @@ function taskWithLatestFrom() {
 }
 
 export function myOperatorsApp() {
-  taskTake();
-  // taskSkip();
+  // taskTake();
+  taskSkip();
   // taskMap();
   // taskFilter();
   // taskTakeWhile();
