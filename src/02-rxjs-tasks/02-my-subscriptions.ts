@@ -1,11 +1,13 @@
 import { fullObserver } from "./utils";
 import { myInterval$, myTimeout$ } from './01-my-observables';
+import { Subscription } from 'rxjs';
 
 function example1() {
-  const timeout$ = myTimeout$(5500);
+  const timeout$ = myTimeout$(2500);
   const subscription = timeout$.subscribe(fullObserver('unsubscribe timeout'));
 
   setTimeout(() => {
+    console.log('BEF UNSUB:',);
     subscription.unsubscribe();
   }, 2000);
 }
@@ -16,6 +18,6 @@ function task1() {
 }
 
 export function mySubscriptionsApp() {
-  // example1();
+  example1();
   // task1();
 }

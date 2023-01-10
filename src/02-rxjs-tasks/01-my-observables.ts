@@ -57,10 +57,17 @@ function example1() {
 export function myTimeout$(delayInMs: number): Observable<void> {
 
   return new Observable((obs) => {
-    setTimeout(() => {
+
+    const timeoutId = setTimeout(() => {
+      console.log('LEAK:',);
       obs.next(undefined);
       obs.complete();
     }, delayInMs);
+
+    return () => { // CLEANUP
+      console.log('CLEANUP:',);
+      clearTimeout(timeoutId);
+    };
   });
 
 }
