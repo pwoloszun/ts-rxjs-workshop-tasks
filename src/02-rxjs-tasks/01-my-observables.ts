@@ -114,10 +114,14 @@ export function myInterval$(delayInMs: number): Observable<number> {
     // COLD stream
     // NOT SHARED producer
     let i = 0; // data PRODUCER
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       obs.next(i);
       i += 1;
     }, delayInMs);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   });
 
 }
