@@ -86,12 +86,37 @@ function timeoutTask() {
 // }, 1000);
 
 // TODO task: myInterval$
+export function myInterval$_HOT(delayInMs: number): Observable<number> {
+
+  // HOT stream
+  // SHARED producer
+  let i = 0; // data PRODUCER
+
+  return new Observable((obs) => {
+    setInterval(() => {
+      obs.next(i);
+      i += 1;
+    }, delayInMs);
+  });
+
+}
+
 export function myInterval$(delayInMs: number): Observable<number> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    // COLD stream
+    // NOT SHARED producer
+    let i = 0; // data PRODUCER
+    setInterval(() => {
+      obs.next(i);
+      i += 1;
+    }, delayInMs);
+  });
+
 }
 
 function intervalTask() {
-  const interval$ = myInterval$(1000)
+  const interval$ = myInterval$(500)
   interval$.subscribe({
     next(value) {
       console.log('NEXT intervalTask', value);
@@ -101,6 +126,18 @@ function intervalTask() {
     },
     complete() {
       console.log('COMPLETE intervalTask');
+    },
+  });
+
+  interval$.subscribe({
+    next(value) {
+      console.log('NEXT 22 intrvl', value);
+    },
+    error(err) {
+      console.log('ERROR 22 intrvl', err);
+    },
+    complete() {
+      console.log('COMPLETE 22 intrvl');
     },
   });
 }
