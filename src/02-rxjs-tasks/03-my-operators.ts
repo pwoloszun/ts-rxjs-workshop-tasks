@@ -179,7 +179,23 @@ function taskFirst() {
 
 // TODO task: myReduce$
 function myReduce$(source$: Observable<any>, accumulatorFn: Function, startValue: any): Observable<any> {
-  return NEVER;
+
+  return new Observable(function (obs) {
+    let memo = startValue;
+    const srcSub = source$.subscribe({
+      next(value) {
+        memo = accumulatorFn(memo, value);
+      },
+      complete() {
+        obs.next(memo);
+        obs.complete();
+      }
+    });
+
+    // cleanup
+    return () => srcSub.unsubscribe();
+  });
+
 }
 
 function taskReduce() {
