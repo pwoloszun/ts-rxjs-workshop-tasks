@@ -219,6 +219,10 @@ function taskBufferCount() {
   const values$ = myRange$(0, 67);
   myBufferCount$(values$, 25)
     .subscribe(fullObserver('taskBufferCount'));
+  // [0..24]
+  // [25..49]
+  // [50..66]
+  // COMPL
 }
 
 function myStartsWith$(source$: Observable<any>, startValue: any) {
@@ -231,19 +235,45 @@ function taskStartsWith() {
     .subscribe(fullObserver('taskStartsWith'));
 }
 
+// MASTER - SLAVE
+// Leader - Follower
 function myWithLatestFrom$(source$: Observable<any>, other$: Observable<any>): Observable<any> {
   return NEVER;
 }
 
 function taskWithLatestFrom() {
-  const slow$ = myInterval$(800);
-  const quick$ = myInterval$(4200);
+  const slow$ = myInterval$(4200);
+  const quick$ = myInterval$(800);
 
-  // myWithLatestFrom$(quick$, slow$)
-  //   .subscribe(fullObserver('taskWithLatestFrom: quick, slow'));
+  myWithLatestFrom$(quick$, slow$)
+    .subscribe(fullObserver('taskWithLatestFrom: quick, slow'));
+  // -- [0, _]
+  // -- [1, _]
+  // -- [2, _]
+  // -- [3, _]
+  // -- [4, _]
+  // -- [4, 0]
+  // [5, 0] # 4800
+  // [6, 0] # 5600
+  // [7, 0]
+  // ...
 
-  myWithLatestFrom$(slow$, quick$)
-    .subscribe(fullObserver('taskWithLatestFrom: slow, quick 2'));
+  // myWithLatestFrom$(slow$, quick$)
+  //   .subscribe(fullObserver('taskWithLatestFrom: slow, quick 2'));
+  // -- [_, 0]
+  // -- [_, 1]
+  // -- [_, 2]
+  // -- [_, 3]
+  // -- [_, 4]
+  // [0, 4] # 4200
+  // -- [0, 5]
+  // -- [0, 6]
+  // -- [0, 7]
+  // -- [0, 8]
+  // -- [0, 9]
+  // [1, 9] # 8400
+  // ...
+
 }
 
 export function myOperatorsApp() {
