@@ -178,7 +178,14 @@ function fromArrayTask() {
 
 // TODO task: myRange$
 export function myRange$(startValue: number, count: number): Observable<number> {
-  return NEVER; // TODO
+
+  return new Observable((obs) => {
+    for (let index = startValue; index < startValue + count; index++) {
+      obs.next(index);
+    }
+    obs.complete();
+  });
+
 }
 
 function rangeTask() {
