@@ -17,6 +17,10 @@ function task1() {
   // TODO
 }
 
+
+// const intervalId = setInterval(() => { }, 2000)
+// clearInterval(intervalId);
+
 export function mySubscriptionsApp() {
   example1();
   // task1();
