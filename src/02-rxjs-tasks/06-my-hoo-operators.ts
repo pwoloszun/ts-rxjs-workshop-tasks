@@ -17,11 +17,9 @@ export function myMergeAll$(sourceHoo$: Observable<Observable<any>>) {
     let hoCompleted = false;
     let innerActiveCount = 0;
     const innerSubs: Subscription[] = [];
-
     const hoSub = sourceHoo$.subscribe({
       next(inner$) {
         innerActiveCount += 1;
-
         const sub = inner$.subscribe({
           next(value) {
             obs.next(value);
@@ -35,7 +33,6 @@ export function myMergeAll$(sourceHoo$: Observable<Observable<any>>) {
         });
         innerSubs.push(sub);
       },
-
       complete() {
         hoCompleted = true;
         if (innerActiveCount <= 0) {
@@ -78,9 +75,45 @@ function exampleMyConcatAll() {
 }
 
 // TODO: mySwitchAll$
-function mySwitchAll$($sourceHoo: Observable<Observable<any>>) {
-  return new Observable(function () {
+function mySwitchAll$(sourceHoo$: Observable<Observable<any>>) {
+
+  return new Observable(function (obs) {
+    let innerSub: Subscription | null = null;
+    let hoActive = true;
+    let innerActive = false;
+
+    const hoSub = sourceHoo$.subscribe({
+      next(inner$) {
+        if (innerSub !== null) {
+          innerSub.unsubscribe();
+        }
+        innerActive = true;
+        innerSub = inner$.subscribe({
+          next(value) {
+            obs.next(value);
+          },
+          complete() {
+            innerActive = false;
+            if (!hoActive) {
+              obs.complete();
+            }
+          }
+        });
+      },
+      complete() {
+        hoActive = false;
+        if (!innerActive) {
+          obs.complete();
+        }
+      }
+    });
+
+    return () => {//CLEANUP
+      hoSub.unsubscribe();
+      innerSub?.unsubscribe();
+    };
   });
+
 }
 
 function exampleMySwitchAll() {
@@ -92,6 +125,8 @@ function exampleMySwitchAll() {
     take(arr$.length),
     map((i) => arr$[i])
   );
+
+  // === Przerwa do 12:24
 
   mySwitchAll$(higherOrderStream$)
     .subscribe(fullObserver('mySwitchAll$'));
@@ -122,8 +157,8 @@ function exampleMyExhaustAll() {
 
 
 export function myHooOperatorsApp() {
-  exampleMyMergeAll();
+  // exampleMyMergeAll();
   // exampleMyConcatAll();
-  // exampleMySwitchAll();
+  exampleMySwitchAll();
   // exampleMyExhaustAll();
 }
