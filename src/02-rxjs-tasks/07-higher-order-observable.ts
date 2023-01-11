@@ -1,4 +1,4 @@
-import { forkJoin, interval, of, from, timer, NEVER } from 'rxjs';
+import { forkJoin, interval, of, from, timer, NEVER, fromEvent } from 'rxjs';
 import {
   concatMap,
   delay,
@@ -16,13 +16,82 @@ import {
 import { fullObserver, items$, randomBetween } from './utils';
 
 
+
+
+// const btnDOM = {} as any;
+// fromEvent(btnDOM, 'click').pipe(
+// )
+
+
 function btnClick$(delay: number, count: number) {
-  // TODO
+  return interval(delay).pipe(
+    take(count)
+  );
 }
 
-function fetchData$(url: string, respnseTime: number) {
-  // TODO
+// HO stream
+const ho$ = btnClick$(100, 3).pipe(
+  // map((ev) => {
+  //   const http$ = fetchUser$(100, 1200); // inner stream
+  //   return http$;
+  // }),
+  // mergeAll()
+  mergeMap((ev) => {
+    const http$ = fetchUser$(100, 1200); // inner stream
+    return http$;
+  }),
+);
+
+// low level
+// ho$.subscribe({
+//   next(http$) {
+//     http$.subscribe({
+//       next(value) {
+//         console.log('SIDE EFF - app logic:', value);
+//       }
+//     })
+//   }
+// });
+
+
+// 
+// ho$.pipe(
+//   mergeAll()
+// mergeMap()
+// );
+
+// FIFO
+// ho$.pipe(
+//   concatAll()
+// );
+
+// only NEWEST
+// ho$.pipe(
+//   switchAll()
+// );
+
+// ho$.pipe(
+//   exhaustAll()
+// );
+
+
+
+
+
+
+function fetchUser$(id: number, respDelay: number) {
+  return of({ id, name: `user ${id}` }).pipe(
+    delay(respDelay)
+  );
 }
+
+
+
+
+
+
+
+
 
 export function hooExamples() {
   // TODO
@@ -44,11 +113,7 @@ function example1() {
   // TODO 2: "flatten" stream of streams
 }
 
-function fetchUser$(id: number) {
-  return of({ id, name: `user ${id}` }).pipe(
-    delay(1200)
-  );
-}
+
 
 function example2() {
   const userIds$ = of(123); // user IDs stream

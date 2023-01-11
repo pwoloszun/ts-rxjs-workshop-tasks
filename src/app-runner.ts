@@ -52,6 +52,7 @@ export class AppRunner {
     // myOperatorsApp();
     // builtInApp();
     // combineMultipleStreamsApp();
-    higherOrderObservablesApp();
+    myHooOperatorsApp();
+    // higherOrderObservablesApp();
   }
 }
