@@ -135,9 +135,44 @@ function exampleMySwitchAll() {
 
 
 // TODO: myExhaustAll$
-function myExhaustAll$($sourceHoo: Observable<Observable<any>>) {
-  return new Observable(function () {
+function myExhaustAll$(sourceHoo$: Observable<Observable<any>>) {
+
+  return new Observable(function (obs) {
+    let innerActive = false;
+    let hoActive = true;
+    let innerSub: Subscription | null = null;
+
+    const hoSub = sourceHoo$.subscribe({
+      next(inner$) {
+        if (!innerActive) {
+          innerActive = true;
+          innerSub = inner$.subscribe({
+            next(value) {
+              obs.next(value);
+            },
+            complete() {
+              innerActive = false;
+              if (!hoActive) {
+                obs.complete();
+              }
+            },
+          });
+        }
+      },
+      complete() {
+        hoActive = false;
+        if (!innerActive) {
+          obs.complete();
+        }
+      }
+    });
+
+    return () => {
+      hoSub.unsubscribe();
+      innerSub?.unsubscribe();
+    };
   });
+
 }
 
 function exampleMyExhaustAll() {
@@ -159,6 +194,6 @@ function exampleMyExhaustAll() {
 export function myHooOperatorsApp() {
   // exampleMyMergeAll();
   // exampleMyConcatAll();
-  exampleMySwitchAll();
-  // exampleMyExhaustAll();
+  // exampleMySwitchAll();
+  exampleMyExhaustAll();
 }
