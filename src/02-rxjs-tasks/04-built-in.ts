@@ -80,6 +80,12 @@ function example1() {
 function example3() {
   const names = ['bob', 'ed', 'kate', 'ADMIN', 'boby'];
   // TODO
+  interval(1200).pipe(
+    take(names.length),
+    map((i) => names[i]),
+    takeWhile((name) => name !== 'ADMIN'),
+    map((name) => `Hello ${name}`)
+  ).subscribe(fullObserver('exmpl3'));
 }
 
 
