@@ -89,13 +89,6 @@ function example3() {
 }
 
 
-// TODO task 1:
-// wygeneruj liczby z przedzialu [5..21] ->
-// odfiltruj tylko nieparzyste ->
-// pomin pierwsze 3 ->
-// z pozostalych wez tylko pierwsze 4 ->
-// przemapuj na kwadraty tych liczb ->
-// wyniki zaloguj na konsoli
 function task1() {
   range(5, 17).pipe(
     filter((n) => n % 2 === 0),

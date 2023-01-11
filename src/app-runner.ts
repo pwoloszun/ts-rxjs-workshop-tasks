@@ -50,6 +50,8 @@ export class AppRunner {
     // myObservablesApp();
     // mySubscriptionsApp();
     // myOperatorsApp();
-    builtInApp();
+    // builtInApp();
+    // combineMultipleStreamsApp();
+    higherOrderObservablesApp();
   }
 }

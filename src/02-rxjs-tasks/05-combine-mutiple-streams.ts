@@ -1,3 +1,8 @@
+
+
+// === Przerwa do 10:37
+
+
 import { interval, of, race, concat, merge, NEVER } from 'rxjs';
 import { map, take, delay } from 'rxjs/operators';
 
@@ -12,7 +17,7 @@ function myStream$(tag: string, delayInMs: number) {
 
 function mergeExample() {
   const quick$ = myStream$('quick', 400);
-  const medium$ = myStream$('medium', 1000);
+  // const medium$ = myStream$('medium', 1000);
   const slow$ = myStream$('slow', 2200);
 
   merge(slow$, quick$).subscribe(fullObserver('merge'));
