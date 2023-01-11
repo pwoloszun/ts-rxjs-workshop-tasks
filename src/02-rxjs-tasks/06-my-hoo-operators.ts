@@ -95,6 +95,7 @@ function exampleMySwitchAll() {
 
   mySwitchAll$(higherOrderStream$)
     .subscribe(fullObserver('mySwitchAll$'));
+  // A0 A1 A2 B0 C0 C1 COMPLETE
 }
 
 
@@ -116,6 +117,7 @@ function exampleMyExhaustAll() {
 
   myExhaustAll$(higherOrderStream$)
     .subscribe(fullObserver('exampleMyExhaustAll'));
+  // A0..A4 C0..C1 COMPLETE
 }
 
 
