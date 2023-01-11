@@ -73,7 +73,7 @@ function taskSkip() {
 }
 
 // TODO task: myMap$
-function myMap$(source$: Observable<any>, mappingFn: Function): Observable<any> {
+export function myMap$(source$: Observable<any>, mappingFn: Function): Observable<any> {
 
   return new Observable(function (obs) {
     const srcSub = source$.subscribe({
@@ -103,7 +103,7 @@ function taskMap() {
 }
 
 // TODO task: myFilter$
-function myFilter$(source$: Observable<any>, filteringFn: Function): Observable<any> {
+export function myFilter$(source$: Observable<any>, filteringFn: Function): Observable<any> {
 
   return new Observable(function (obs) {
     const srcSub = source$.subscribe({

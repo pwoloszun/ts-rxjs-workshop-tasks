@@ -21,8 +21,31 @@ import {
   startWith,
   withLatestFrom,
 } from 'rxjs/operators';
+import { myInterval$ } from './01-my-observables';
+import { myFilter$, myMap$, myTake$ } from './03-my-operators';
 
 import { fullObserver } from './utils';
+
+// myTake$(
+//   myFilter$(
+//     myMap$(
+//       myInterval$(1000),
+//       (i) => i ** 2
+//     ),
+//     (n) => n % 2 === 0
+//   ),
+//   3
+// )
+
+
+// interval(1000).pipe(
+//   map((i) => i ** 2),
+//   filter((n) => n % 2 === 0),
+//   take(3)
+// ).subscribe(fullObserver('my test'));
+
+
+
 
 // TODO example 1:
 // wez tablice imion ->
@@ -33,11 +56,13 @@ import { fullObserver } from './utils';
 function example1() {
   const names = ['bob', 'ed', 'kate', 'ADMIN', 'boby'];
   // TODO
+
   from(names).pipe(
     takeWhile((name) => name !== 'ADMIN'),
-    map((name) => `Hello ${name}`),
+    map((name) => `Hello ${name}!`),
     delay(1200)
   ).subscribe(fullObserver('example1'));
+
 }
 
 // TODO example 3:
@@ -66,8 +91,8 @@ function task1() {
 // stworz interwal co 0.8s ->
 // pomin pierwsza wygenerowana liczbe
 // z pozostalych, wez tylko 10 pierwszych wynikow ->
-// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb ->
-// kazdy posredni wynik zaloguj na konsoli ("side effect")->
+// obliczaj iloczyn wszystkich dotychczas wygenerowanych liczb -> SCAN
+// kazdy posredni wynik zaloguj na konsoli ("side effect")-> TAP
 // wez tylko ostatni obliczony wynik ->
 // ostatni iloczyn zaloguj na konsoli
 function task2() {
@@ -100,6 +125,7 @@ function task4() {
 // buforuj wyniki i wydawaj je za kazdym razem gdy everyTwoSeconds$ cos emituje
 // wyniki zaloguj na konsoli
 function task5() {
+  const everyTwoSeconds$ = interval(2000);
 }
 
 // TODO task 6:
